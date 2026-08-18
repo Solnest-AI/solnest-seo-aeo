@@ -99,6 +99,7 @@ def parse_html(html: str, base_url: Optional[str] = None) -> dict:
             "internal": [],
             "external": [],
         },
+        "links_analyzed": False,
         "schema": [],
         "open_graph": {},
         "twitter_card": {},
@@ -178,7 +179,14 @@ def parse_html(html: str, base_url: Optional[str] = None) -> dict:
         })
 
     # Links
+    # Solnest fix: upstream gated all link analysis on an optional --url and
+    # reported 0/0 when it was absent, which reads as 'no links' rather than
+    # 'not measured'. Fall back to the page's own canonical or og:url.
+    if not base_url:
+        base_url = result["canonical"] or result["open_graph"].get("og:url")
+
     if base_url:
+        result["links_analyzed"] = True
         base_domain = urlparse(base_url).netloc
 
         for a in soup.find_all("a", href=True):
@@ -262,8 +270,12 @@ def main():
         print(f"H1 Tags: {len(result['h1'])}")
         print(f"H2 Tags: {len(result['h2'])}")
         print(f"Images: {len(result['images'])}")
-        print(f"Internal Links: {len(result['links']['internal'])}")
-        print(f"External Links: {len(result['links']['external'])}")
+        if result["links_analyzed"]:
+            print(f"Internal Links: {len(result['links']['internal'])}")
+            print(f"External Links: {len(result['links']['external'])}")
+        else:
+            print("Internal Links: not analyzed (no --url and no canonical/og:url on page)")
+            print("External Links: not analyzed (no --url and no canonical/og:url on page)")
         print(f"Schema Blocks: {len(result['schema'])}")
         print(f"Word Count: {result['word_count']}")
 

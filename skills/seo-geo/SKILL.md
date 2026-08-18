@@ -152,11 +152,12 @@ Check `robots.txt` for these AI crawlers:
 
 | Crawler | Owner | Purpose | Obeys robots.txt? |
 |---------|-------|---------|---|
-| GPTBot | OpenAI | ChatGPT web search | yes |
-| OAI-SearchBot | OpenAI | OpenAI search features | yes |
+| **OAI-SearchBot** | OpenAI | **ChatGPT search index. Controls citation.** | yes |
+| GPTBot | OpenAI | Model training only. Blocking it does NOT remove you from ChatGPT answers. | yes |
 | ChatGPT-User | OpenAI | ChatGPT browsing (user-triggered) | no (user-triggered) |
-| ClaudeBot | Anthropic | Claude web features | yes |
-| PerplexityBot | Perplexity | Perplexity AI search | yes |
+| **Claude-SearchBot** | Anthropic | **Claude search index. Controls citation.** | yes |
+| ClaudeBot | Anthropic | Model training / general web crawl | yes |
+| **PerplexityBot** | Perplexity | **Perplexity index. Controls citation.** | yes |
 | CCBot | Common Crawl | Training data (often blocked) | yes |
 | anthropic-ai | Anthropic | Claude training | yes |
 | Bytespider | ByteDance | TikTok/Douyin AI | yes |
@@ -167,7 +168,23 @@ Check `robots.txt` for these AI crawlers:
 | Google-NotebookLM | Google | Fetches individual user-added source URLs | **no (user-triggered)** |
 | Google Messages | Google | User-triggered fetch | **no (user-triggered)** |
 
-**Recommendation:** Allow GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot for AI search visibility. Block CCBot and training crawlers if desired.
+**Recommendation:** Allow `OAI-SearchBot`, `Claude-SearchBot`, and `PerplexityBot` first. Those three are the crawlers that decide whether you can be cited. Allowing `GPTBot` and `ClaudeBot` additionally opts you into training, which is a separate business decision and has no effect on citation. Block CCBot and other training crawlers if you want.
+
+> ### The mistake almost everyone makes
+>
+> Training crawlers and search crawlers are different bots, and blocking the wrong one is the
+> single most common self-inflicted AI-visibility wound.
+>
+> | If you want to appear in | Allow this | People wrongly configure |
+> |---|---|---|
+> | ChatGPT answers | `OAI-SearchBot` | `GPTBot` (training only) |
+> | Claude answers | `Claude-SearchBot` | `ClaudeBot` (training only) |
+> | Google AI Overviews | `Googlebot` + snippets | `Google-Extended` (**no effect on AI Overviews**) |
+> | Gemini app grounding | `Google-Extended` | |
+>
+> Verify at the edge, not just in robots.txt. A permissive `robots.txt` means nothing if
+> Cloudflare, a WAF, or a bot-management rule is returning 403 to these user agents before they
+> reach your origin. Always confirm with a real request using the crawler's user agent.
 
 > **User-triggered fetchers ignore robots.txt by design** (Google-Agent, Google-NotebookLM, Google Messages, ChatGPT-User). robots.txt cannot block them, use server-side access controls. Google's canonical crawling/robots reference moved to **developers.google.com/crawling** (migrated 2025-11-20); IP-range files now live at `/crawling/ipranges/` and `googlebot.json` was renamed `common-crawlers.json`. Emerging: **Web Bot Auth** (RFC 9421) lets bots authenticate via a `Signature-Agent` header + key directory (used by Google-Agent); reverse-DNS verification remains the fallback.
 

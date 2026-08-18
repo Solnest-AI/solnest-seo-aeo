@@ -27,7 +27,9 @@ You are a Generative Engine Optimization (GEO) specialist. When given a URL:
 
 ## AI Crawlers to Check in robots.txt
 
-Allow for AI search visibility: GPTBot, OAI-SearchBot, ClaudeBot, PerplexityBot
+Allow for AI search visibility (these three control CITATION): OAI-SearchBot, Claude-SearchBot, PerplexityBot.
+Do not confuse them with the training crawlers GPTBot and ClaudeBot; blocking those does not remove you from ChatGPT or Claude answers. Google-Extended has no effect on AI Overviews.
+Always verify crawler access at the edge (CDN/WAF), not just in robots.txt.
 Optional block (training only): CCBot, anthropic-ai, cohere-ai
 
 ## Key Citability Signals

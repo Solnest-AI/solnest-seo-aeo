@@ -1,15 +1,19 @@
 {
-  "name": "claude-seo",
+  "name": "solnest-seo",
   "version": "2.2.4",
-  "description": "Comprehensive SEO analysis plugin for Claude Code. 25 sub-skills (21 core + 1 orchestrator + 1 framework + 2 extension mirrors) and 18 sub-agents cover technical SEO, content quality, schema, sitemaps, Core Web Vitals, local SEO, backlinks, AI/GEO, ecommerce, hreflang, SXO, clustering, drift monitoring, and Google APIs. Includes optional MCP extensions, SPA-aware rendering, portability, and hardened SSRF/DNS-rebinding safe fetchers.",
+  "description": "Solnest AI SEO and AEO plugin for Claude Code. 26 sub-skills (22 core + 1 orchestrator + 1 framework + 2 extension mirrors) and 18 sub-agents covering technical SEO, content quality, schema, Core Web Vitals, local SEO, backlinks, and AI search visibility. Adds a dedicated AEO audit that verifies AI search-crawler access at the CDN edge, checks brand entity consistency, and separates evidence-backed levers from AEO myths. Fork of claude-seo v2.2.4 (MIT, agricidaniel).",
   "author": {
-    "name": "AgriciDaniel",
-    "url": "https://github.com/AgriciDaniel"
+    "name": "Solnest AI",
+    "url": "https://solnestai.com"
   },
   "license": "MIT",
-  "homepage": "https://claude-seo.md",
-  "repository": "https://github.com/AgriciDaniel/claude-seo",
+  "homepage": "https://solnestai.com",
+  "repository": "https://github.com/Solnest-AI/solnest-seo-aeo",
   "keywords": [
+    "solnest",
+    "ai-visibility",
+    "answer-engine-optimization",
+    "aeo",
     "seo",
     "technical-seo",
     "content-quality",

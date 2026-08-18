@@ -1,24 +1,29 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "agricidaniel-claude-seo",
+  "name": "solnest-ai",
   "owner": {
-    "name": "AgriciDaniel"
+    "name": "Solnest AI",
+    "url": "https://solnestai.com"
   },
   "metadata": {
-    "description": "Comprehensive SEO analysis plugin for Claude Code. 25 sub-skills and 18 sub-agents, plus 8 optional MCP extensions (DataForSEO, Firecrawl, Banana, Ahrefs, SE Ranking, Profound, Bing Webmaster, Unlighthouse). v2.2.4 adds a managed cross-platform runtime and safe sitemap discovery, and repairs GSC pagination, Bing endpoints, extension paths, Windows portability, SPA rendering, and JSON-LD extraction."
+    "description": "Solnest AI SEO and AEO plugin for Claude Code. 26 sub-skills (22 core + 1 orchestrator + 1 framework + 2 extension mirrors) and 18 sub-agents covering technical SEO, content quality, schema, Core Web Vitals, local SEO, backlinks, and AI search visibility. Adds a dedicated AEO audit that verifies AI search-crawler access at the CDN edge, checks brand entity consistency, and separates evidence-backed levers from AEO myths. Fork of claude-seo v2.2.4 (MIT, agricidaniel)."
   },
   "plugins": [
     {
-      "name": "claude-seo",
+      "name": "solnest-seo",
       "source": "./",
-      "description": "Comprehensive SEO analysis plugin for Claude Code. 25 sub-skills and 18 sub-agents, plus 8 optional MCP extensions. v2.2.4 adds a managed cross-platform runtime and safe sitemap discovery, and repairs GSC pagination, Bing endpoints, extension paths, Windows portability, SPA rendering, JSON-LD extraction, and DataForSEO permissions.",
+      "description": "Solnest AI SEO and AEO plugin for Claude Code. 26 sub-skills (22 core + 1 orchestrator + 1 framework + 2 extension mirrors) and 18 sub-agents covering technical SEO, content quality, schema, Core Web Vitals, local SEO, backlinks, and AI search visibility. Adds a dedicated AEO audit that verifies AI search-crawler access at the CDN edge, checks brand entity consistency, and separates evidence-backed levers from AEO myths. Fork of claude-seo v2.2.4 (MIT, agricidaniel).",
       "author": {
-        "name": "AgriciDaniel",
-        "url": "https://github.com/AgriciDaniel"
+        "name": "Solnest AI",
+        "url": "https://solnestai.com"
       },
       "category": "marketing",
-      "homepage": "https://claude-seo.md",
+      "homepage": "https://solnestai.com",
       "keywords": [
+        "solnest",
+        "ai-visibility",
+        "answer-engine-optimization",
+        "aeo",
         "seo",
         "technical-seo",
         "content-quality",

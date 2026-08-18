@@ -210,8 +210,8 @@ Weighted aggregate of all categories:
 
 ## Sub-Skills
 
-This skill orchestrates 24 sub-skills (21 core + 1 framework integration + 2 extension
-mirrors). The orchestrator itself (`seo`) is the 25th in `skills/`, but does not
+This skill orchestrates 25 sub-skills (22 core + 1 framework integration + 2 extension
+mirrors). The orchestrator itself (`seo`) is the 26th in `skills/`, but does not
 orchestrate itself, so it is not enumerated below.
 
 1. **seo-audit** -- Full website audit with parallel delegation
@@ -235,9 +235,10 @@ orchestrate itself, so it is not enumerated below.
 19. **seo-sxo** -- Search Experience Optimization (contributed by Florian Schmitz)
 20. **seo-drift** -- SEO drift monitoring (contributed by Dan Colta)
 21. **seo-ecommerce** -- E-commerce SEO intelligence (contributed by Matej Marjanovic)
-22. **seo-dataforseo** -- Live SEO data via DataForSEO MCP (extension mirror)
-23. **seo-image-gen** -- AI image generation for SEO assets via Gemini (extension mirror)
-24. **seo-flow** -- FLOW framework integration (Find -> Leverage -> Optimize -> Win, 41 AI prompts, CC BY 4.0)
+22. **seo-aeo** -- Solnest AI visibility audit: search-crawler access verified at the CDN edge, brand entity consistency, evidence-ranked AEO levers
+23. **seo-dataforseo** -- Live SEO data via DataForSEO MCP (extension mirror)
+24. **seo-image-gen** -- AI image generation for SEO assets via Gemini (extension mirror)
+25. **seo-flow** -- FLOW framework integration (Find -> Leverage -> Optimize -> Win, 41 AI prompts, CC BY 4.0)
 
 ### Optional Extensions
 
