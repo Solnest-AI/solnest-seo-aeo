@@ -67,6 +67,45 @@ supports.
 
 Run `/seo doctor` any time to confirm the environment is healthy.
 
+## Desktop app vs terminal
+
+Both work, and they share the same configuration. The desktop app and the `claude` CLI
+both read `~/.claude/settings.json`, so installing once makes the plugin available in
+both. You do not install it twice.
+
+**In the desktop app**, the interactive `/plugin` browser may not be available, which is
+exactly why the paste block above is the recommended path. Paste it into the message box
+like any other request. Claude runs the steps for you.
+
+**Restarting means quitting the app.** Cmd+Q, then reopen. Closing a tab or starting a new
+chat is not enough, because the plugin is loaded when the app starts.
+
+### The one desktop-specific trap
+
+macOS apps launched from the Dock do not always inherit your shell's PATH. A bare macOS
+environment resolves `python3` to `/usr/bin/python3`, which is **3.9.6** and below the
+minimum. If `/seo setup` reports that it needs Python 3.10 or newer even though you know
+you installed a newer one, point it at your real interpreter directly.
+
+Find it:
+
+```bash
+which python3
+```
+
+Then set that path once, in `~/.claude/settings.json` under `env`:
+
+```json
+{
+  "env": {
+    "CLAUDE_SEO_PYTHON": "/opt/homebrew/bin/python3"
+  }
+}
+```
+
+Restart, and run `/seo doctor`. It should print `Runtime: ready`. Use the path `which
+python3` gave you; the one above is the common Apple Silicon Homebrew location.
+
 ## If something goes wrong
 
 **"Python 3.10 or newer required"** is the most common failure by a wide margin.
