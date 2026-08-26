@@ -16,7 +16,7 @@ from typing import Optional
 from urllib.parse import urljoin, urlparse
 
 try:
-    from bs4 import BeautifulSoup
+    from bs4 import BeautifulSoup, NavigableString, Tag
 except ImportError:
     print("Error: beautifulsoup4 required. Install with: pip install beautifulsoup4")
     sys.exit(1)
@@ -73,6 +73,77 @@ def _detect_lazy_method(img) -> str:
     return "none"
 
 
+_BLOCK_TAGS = frozenset({
+    "address", "article", "aside", "blockquote", "br", "dd", "div", "dl", "dt",
+    "fieldset", "figcaption", "figure", "footer", "form", "h1", "h2", "h3",
+    "h4", "h5", "h6", "header", "hr", "li", "main", "nav", "ol", "p", "pre",
+    "section", "table", "tbody", "td", "tfoot", "th", "thead", "tr", "ul",
+})
+
+_BLOCK_STYLE_RE = re.compile(r"display\s*:\s*(block|flex|grid|list-item|table)", re.I)
+
+
+def _is_block_level(tag) -> bool:
+    """True when a tag renders as its own line, so its edges separate words."""
+    if tag.name in _BLOCK_TAGS:
+        return True
+    style = tag.get("style")
+    return bool(style and _BLOCK_STYLE_RE.search(style))
+
+
+def _visible_text(element) -> str:
+    """
+    Extract text the way an assistive technology or a content extractor reads it.
+
+    Two problems this solves, both common on modern animated marketing sites:
+
+    1. Split-text and scramble animations duplicate every character into
+       ``aria-hidden="true"`` spans for the visual effect, keeping one clean
+       ``sr-only`` copy for accessibility. Naive concatenation returns the
+       duplicates, so an ``<h1>`` reading "Watch what happens" comes back as
+       "Watch what happensWWWWaaaattttcccchhhh...". Any subtree explicitly
+       marked aria-hidden is decorative by definition, so it is skipped.
+
+    2. ``get_text(strip=True)`` strips every text node individually, which
+       deletes standalone whitespace nodes between inline elements. Markup like
+       ``Still doing it<!-- --> <span>all yourself?</span>`` collapses to
+       "Still doing itall yourself?". Normalizing whitespace across the joined
+       string preserves the real space without inventing spaces between
+       per-character spans.
+    """
+    parts = []
+    for node in element.descendants:
+        # A block-level boundary is a visual line break, so it separates words
+        # even when the markup carries no whitespace between the two spans.
+        # Without this, `<span style="display:block">Watch what happens</span>`
+        # followed by `<span style="display:block">when AI meets</span>` joins
+        # into "happenswhen".
+        if isinstance(node, Tag):
+            if _is_block_level(node):
+                parts.append(" ")
+            continue
+        # `type(...) is` excludes Comment, CData and Doctype, which all subclass
+        # NavigableString and must not become visible text.
+        if type(node) is not NavigableString:
+            continue
+        hidden = False
+        for parent in node.parents:
+            if parent is element:
+                break
+            get = getattr(parent, "get", None)
+            if get is not None and get("aria-hidden") == "true":
+                hidden = True
+                break
+        if not hidden:
+            parts.append(str(node))
+    text = re.sub(r"\s+", " ", "".join(parts)).strip()
+    if not text:
+        # Every child was decorative. Fall back rather than report an empty
+        # heading, which downstream agents would read as "missing heading".
+        text = re.sub(r"\s+", " ", element.get_text()).strip()
+    return text
+
+
 def parse_html(html: str, base_url: Optional[str] = None) -> dict:
     """
     Parse HTML and extract SEO-relevant elements.
@@ -110,7 +181,7 @@ def parse_html(html: str, base_url: Optional[str] = None) -> dict:
     # Title
     title_tag = soup.find("title")
     if title_tag:
-        result["title"] = title_tag.get_text(strip=True)
+        result["title"] = _visible_text(title_tag)
 
     # Meta tags
     for meta in soup.find_all("meta"):
@@ -148,7 +219,7 @@ def parse_html(html: str, base_url: Optional[str] = None) -> dict:
     # Headings
     for tag in ["h1", "h2", "h3"]:
         for heading in soup.find_all(tag):
-            text = heading.get_text(strip=True)
+            text = _visible_text(heading)
             if text:
                 result[tag].append(text)
                 # Flag suspiciously short or purely numeric headings (likely counters/stats)
@@ -199,7 +270,7 @@ def parse_html(html: str, base_url: Optional[str] = None) -> dict:
 
             link_data = {
                 "href": full_url,
-                "text": a.get_text(strip=True)[:100],
+                "text": _visible_text(a)[:100],
                 "rel": a.get("rel", []),
             }
 
@@ -230,7 +301,7 @@ def parse_html(html: str, base_url: Optional[str] = None) -> dict:
     for element in soup(["script", "style", "nav", "footer", "header"]):
         element.decompose()
 
-    text = soup.get_text(separator=" ", strip=True)
+    text = _visible_text(soup)
     words = re.findall(r"\b\w+\b", text)
     result["word_count"] = len(words)
 

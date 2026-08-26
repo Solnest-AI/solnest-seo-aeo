@@ -20,6 +20,19 @@ Modifications made by Solnest AI on top of upstream v2.2.4:
     measured". It now falls back to the page's own canonical or og:url, and
     reports "not analyzed" when no base URL can be determined.
 
+  - scripts/parse_html.py: text extraction returned decorative content. Split-text
+    and scramble animations duplicate every character into aria-hidden="true"
+    spans while keeping one clean sr-only copy, so an <h1> reading "Watch what
+    happens when AI meets your business." was returned as
+    "Watch what happensWWWWaaaattttcccchhhh...". Separately,
+    get_text(strip=True) stripped standalone whitespace nodes between inline
+    elements, collapsing "Still doing it<!-- --> <span>all yourself?</span>"
+    into "Still doing itall yourself?", and block-level spans used as line
+    breaks joined without a space. Extraction now skips aria-hidden subtrees,
+    treats block-level boundaries as word separators, normalizes whitespace
+    across the joined string, and falls back to full text rather than returning
+    an empty heading. Applies to titles, headings, link text and word counts.
+
   - skills/seo-geo/SKILL.md and agents/seo-geo.md: added Claude-SearchBot,
     corrected the training-crawler versus search-crawler distinction for
     OpenAI and Anthropic, noted that Google-Extended has no effect on Google
