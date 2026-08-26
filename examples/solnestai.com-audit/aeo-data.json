@@ -1,0 +1,125 @@
+{
+  "url": "https://solnestai.com",
+  "audited_at": "2026-08-25",
+  "band": "Readable",
+  "crawler_access": {
+    "robots_readable": true,
+    "blocking_issues": [],
+    "crawlers": [
+      {
+        "crawler": "OAI-SearchBot",
+        "role": "search",
+        "engine": "ChatGPT",
+        "robots_allowed": true,
+        "edge_status": 200,
+        "edge_blocked": false
+      },
+      {
+        "crawler": "Claude-SearchBot",
+        "role": "search",
+        "engine": "Claude",
+        "robots_allowed": true,
+        "edge_status": 200,
+        "edge_blocked": false
+      },
+      {
+        "crawler": "PerplexityBot",
+        "role": "search",
+        "engine": "Perplexity",
+        "robots_allowed": true,
+        "edge_status": 200,
+        "edge_blocked": false
+      },
+      {
+        "crawler": "Googlebot",
+        "role": "search",
+        "engine": "Google AI Overviews",
+        "robots_allowed": true,
+        "edge_status": 200,
+        "edge_blocked": false
+      },
+      {
+        "crawler": "GPTBot",
+        "role": "training",
+        "engine": "OpenAI training",
+        "robots_allowed": true,
+        "edge_status": 200,
+        "edge_blocked": false
+      },
+      {
+        "crawler": "ClaudeBot",
+        "role": "training",
+        "engine": "Anthropic training",
+        "robots_allowed": true,
+        "edge_status": 200,
+        "edge_blocked": false
+      },
+      {
+        "crawler": "Google-Extended",
+        "role": "training",
+        "engine": "Gemini app grounding",
+        "robots_allowed": true,
+        "edge_status": 200,
+        "edge_blocked": false
+      }
+    ]
+  },
+  "entity": {
+    "consistent": true,
+    "surfaces": {
+      "title": "Solnest AI - Watch What Happens When AI Meets Your Business",
+      "og:site_name": "Solnest AI",
+      "jsonld:Organization": "Solnest AI",
+      "jsonld:ProfessionalService": "Solnest AI",
+      "llms.txt": "Solnest AI"
+    },
+    "mismatches": []
+  },
+  "citability": {
+    "extracted_words": 479,
+    "raw_words": 1921,
+    "extraction_ratio": "25%",
+    "longest_paragraph_words": 37,
+    "blocks_over_40_words": 0,
+    "target_block_words": "134-167",
+    "percentages": 0,
+    "dollar_figures": 0,
+    "numerals": 4,
+    "quotations": 3,
+    "source_phrases": 1,
+    "question_form_headings": "2/8",
+    "snippet_eligible": true
+  },
+  "findings": [
+    {
+      "title": "Five pages are canonicalised to the homepage, blocking AI retrieval",
+      "severity": "Critical",
+      "description": "Google AI Overviews and AI Mode retrieve from the ordinary Search index. /about, /services, /work, /book and /webinar all declare https://solnestai.com as canonical, so they are not eligible to be retrieved or cited. Verified against raw HTML.",
+      "recommendation": "Emit self-referencing canonicals. This is the single highest-leverage fix for both search and AI visibility."
+    },
+    {
+      "title": "Nothing on the site is quotable",
+      "severity": "High",
+      "description": "Main-content extraction yields 479 words from 1,921. The longest paragraph is 37 words against a 134 to 167 word target, with zero paragraphs over 40 words. Extractable text contains 0 percentages and 0 dollar figures. A model can read the page and has nothing to lift and attribute.",
+      "recommendation": "Add two or three genuine 130 to 160 word answer blocks with real numbers. Published pricing is the most quotable asset available and is absent from extractable text."
+    },
+    {
+      "title": "Only two of eight homepage H2s are question-form",
+      "severity": "Medium",
+      "description": "Question-shaped headings match how people phrase prompts and how retrieval segments a page.",
+      "recommendation": "Convert several H2s to the questions buyers actually ask."
+    },
+    {
+      "title": "AI search crawler access is correctly configured",
+      "severity": "Info",
+      "description": "All four search crawlers are allowed in robots.txt and return 200 at the edge. The robots.txt correctly separates search crawlers from training crawlers, which most sites get wrong.",
+      "recommendation": "No action. Keep OAI-SearchBot, Claude-SearchBot, PerplexityBot and Googlebot allowed."
+    },
+    {
+      "title": "Brand entity is consistent across all machine-readable surfaces",
+      "severity": "Info",
+      "description": "Solnest AI is byte-identical across title, og:site_name, both JSON-LD blocks and llms.txt. No entity split.",
+      "recommendation": "No action. Keep the name byte-identical when adding directory listings or a Google Business Profile."
+    }
+  ]
+}

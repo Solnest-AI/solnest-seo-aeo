@@ -1,0 +1,211 @@
+{
+  "summary": {
+    "health_score": 52,
+    "business_type": "B2B AI implementation agency (service business, STR/real-estate/med-spa vertical focus)",
+    "top_findings": [
+      "Six of eight pages declare the homepage as their canonical, instructing Google not to index them",
+      "Five pages share a byte-identical title tag and meta description",
+      "/work carries 2,789 words of portfolio content and is canonicalised away to the homepage",
+      "No page contains a self-contained answer block; longest paragraph on the homepage is 37 words",
+      "Zero percentages and zero dollar figures appear in extractable text across the site"
+    ],
+    "quick_wins": [
+      "Set a self-referencing canonical on /about, /services, /work, /book and /webinar",
+      "Write unique title tags and meta descriptions for those five pages",
+      "Remove the duplicated brand suffix in the /webinar title",
+      "Add width and height to the six homepage images missing them",
+      "Publish real pricing figures as quotable text"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 40,
+      "what_works": [
+        "HTTPS enforced, clean 200 responses across all eight sitemap URLs",
+        "robots.txt present, valid, and explicitly permissive to AI search crawlers",
+        "sitemap.xml present and valid at /sitemap.xml with 8 URLs",
+        "meta robots is index, follow with no X-Robots-Tag override"
+      ],
+      "findings": [
+        {
+          "title": "Six of eight pages canonicalise to the homepage",
+          "severity": "Critical",
+          "description": "/about, /services, /work, /book and /webinar all emit <link rel=\"canonical\" href=\"https://solnestai.com\">. Verified directly against raw HTML, not through a parser. A canonical pointing at a different URL tells Google the page is a duplicate and should not be indexed in its own right. These are not duplicates: /work alone holds 2,789 words of unique portfolio content.",
+          "recommendation": "Emit a self-referencing canonical on every page. /about should declare https://solnestai.com/about, and so on. This is almost certainly one shared layout component hardcoding the site root."
+        },
+        {
+          "title": "Core Web Vitals could not be measured",
+          "severity": "Info",
+          "description": "PageSpeed Insights returned a rate-limit error because no API key is configured. No field or lab data was collected, so no CWV claim is made in this report.",
+          "recommendation": "Run /solnest-seo:seo google setup to add a free Google API key, then re-run for real CrUX field data."
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 38,
+      "what_works": [
+        "Every page has exactly one H1",
+        "Heading hierarchy is clean, with 24 H3s under 8 H2s on the homepage",
+        "Homepage carries 17 internal links and a coherent structure"
+      ],
+      "findings": [
+        {
+          "title": "Five pages share an identical title tag and meta description",
+          "severity": "Critical",
+          "description": "/, /about, /services, /work and /book all use the title \"Solnest AI - Watch What Happens When AI Meets Your Business\" and the same meta description verbatim. Duplicate titles across a small site are a strong duplicate-content signal and waste the highest-value on-page ranking element on four pages.",
+          "recommendation": "Write a unique, intent-matched title and description per page. /services should target the service query, /work the proof query, /about the entity query."
+        },
+        {
+          "title": "Duplicated brand suffix in the /webinar title",
+          "severity": "Medium",
+          "description": "The title reads \"Live Demo - From Zero to Automated | Solnest AI | Solnest AI\", repeating the brand twice. This is the signature of a template appending a suffix to a title that already contains one.",
+          "recommendation": "Strip the brand from the page-level title or make the template suffix conditional."
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 55,
+      "what_works": [
+        "/work is substantial at 2,789 words",
+        "The blog post is a genuine 947-word comparison piece with 4 schema blocks",
+        "Copy is specific about verticals: short-term rentals, real estate, med spas"
+      ],
+      "findings": [
+        {
+          "title": "Four pages are thin",
+          "severity": "High",
+          "description": "/book is 52 words, /blog is 59, /about is 292 and /webinar is 317. /about at 292 words is well short of what an entity-establishing page needs, and it is one of the pages AI systems read to decide who a company is.",
+          "recommendation": "Prioritise /about and /services. Both are commercially important and both are currently too thin to rank or be cited."
+        }
+      ]
+    },
+    {
+      "name": "Schema and Structured Data",
+      "score": 85,
+      "what_works": [
+        "Organization and ProfessionalService JSON-LD present on every page",
+        "Correct use of @id anchors such as #organization and #service",
+        "Blog post carries 4 schema blocks including article-level markup",
+        "Organization name is byte-identical to every other brand surface"
+      ],
+      "findings": [
+        {
+          "title": "Schema is duplicated rather than page-specific",
+          "severity": "Low",
+          "description": "The same Organization and ProfessionalService pair appears on all pages. That is valid and harmless, but page-type schema is missing where it would earn rich results.",
+          "recommendation": "Add Service schema on /services and FAQPage where genuine Q&A exists. Note this is a rich-results play, not an AI-citation lever."
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 70,
+      "what_works": [
+        "Zero missing alt attributes across all 8 pages, which is unusual and good"
+      ],
+      "findings": [
+        {
+          "title": "Six homepage images lack width and height",
+          "severity": "Medium",
+          "description": "6 of 9 homepage images declare no intrinsic dimensions, which allows layout shift while they load and harms Cumulative Layout Shift.",
+          "recommendation": "Add explicit width and height, or use the Next.js Image component which sets them automatically."
+        },
+        {
+          "title": "Only one image is lazy-loaded",
+          "severity": "Low",
+          "description": "1 of 9 homepage images uses loading=\"lazy\".",
+          "recommendation": "Lazy-load everything below the fold, keeping the LCP image eager."
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 55,
+      "what_works": [
+        "All four search crawlers allowed in robots.txt and returning 200 at the CDN edge: OAI-SearchBot (ChatGPT), Claude-SearchBot (Claude), PerplexityBot (Perplexity), Googlebot (Google AI Overviews)",
+        "robots.txt correctly separates search crawlers from training crawlers, which most sites get wrong. OAI-SearchBot and Claude-SearchBot control citation; GPTBot and ClaudeBot are training only; Google-Extended has no effect on AI Overviews",
+        "Snippet-eligible: index, follow with no X-Robots-Tag override",
+        "Brand entity is byte-identical across all 5 machine-readable surfaces: title, og:site_name, jsonld:Organization, jsonld:ProfessionalService, llms.txt",
+        "AI visibility band: Readable"
+      ],
+      "findings": [
+        {
+          "title": "Five pages are canonicalised to the homepage, blocking AI retrieval",
+          "severity": "Critical",
+          "description": "Google AI Overviews and AI Mode retrieve from the ordinary Search index. /about, /services, /work, /book and /webinar all declare https://solnestai.com as canonical, so they are not eligible to be retrieved or cited. Verified against raw HTML.",
+          "recommendation": "Emit self-referencing canonicals. This is the single highest-leverage fix for both search and AI visibility."
+        },
+        {
+          "title": "Nothing on the site is quotable",
+          "severity": "High",
+          "description": "Main-content extraction yields 479 words from 1,921. The longest paragraph is 37 words against a 134 to 167 word target, with zero paragraphs over 40 words. Extractable text contains 0 percentages and 0 dollar figures. A model can read the page and has nothing to lift and attribute.",
+          "recommendation": "Add two or three genuine 130 to 160 word answer blocks with real numbers. Published pricing is the most quotable asset available and is absent from extractable text."
+        },
+        {
+          "title": "Only two of eight homepage H2s are question-form",
+          "severity": "Medium",
+          "description": "Question-shaped headings match how people phrase prompts and how retrieval segments a page.",
+          "recommendation": "Convert several H2s to the questions buyers actually ask."
+        },
+        {
+          "title": "Citability measurements",
+          "severity": "Info",
+          "description": "Extraction yields 479 of 1921 words (25%). Longest paragraph 37 words against a 134-167 target. Paragraphs over 40 words: 0. Percentages: 0. Dollar figures: 0. Question-form H2s: 2/8.",
+          "recommendation": "Track these on re-audit. They are the concrete measures behind the citability score."
+        }
+      ]
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": [
+          "Set self-referencing canonicals on /about, /services, /work, /book, /webinar",
+          "Write unique titles and meta descriptions for those five pages",
+          "Remove the duplicated brand suffix in the /webinar title",
+          "Re-submit sitemap.xml in Search Console and request reindexing"
+        ]
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": [
+          "Expand /about and /services past thin-content thresholds",
+          "Add two or three 130 to 160 word quotable answer blocks with real numbers",
+          "Publish actual pricing as extractable text",
+          "Add width and height to the six homepage images missing them"
+        ]
+      },
+      {
+        "name": "Phase 3: Content and Authority",
+        "timeframe": "Month 2",
+        "items": [
+          "Convert key H2s to question form",
+          "Add Service schema on /services",
+          "Pursue earned media and third-party mentions, which drive 84% of AI citations",
+          "Build out the blog, which currently holds one post"
+        ]
+      },
+      {
+        "name": "Phase 4: Monitoring and Iteration",
+        "timeframe": "Ongoing",
+        "items": [
+          "Capture a drift baseline so deploys can be diffed",
+          "Add a Google API key for real CrUX field data",
+          "Re-run the AEO audit monthly against a fixed prompt set and track the trend"
+        ]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/",
+    "aeo_report": "AEO-REPORT.md",
+    "aeo_data": "aeo-data.json"
+  }
+}

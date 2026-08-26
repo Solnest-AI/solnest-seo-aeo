@@ -67,6 +67,13 @@ supports.
 
 Run `/solnest-seo:seo doctor` any time to confirm the environment is healthy.
 
+## Want more than the defaults?
+
+The plugin is fully functional with no API keys. If you want real Core Web Vitals, Search Console
+data, or backlinks, [`docs/API-SETUP.md`](docs/API-SETUP.md) walks through every optional
+integration, free ones first, with honest costs. The free Google key takes about five minutes and
+is the one worth doing.
+
 ## Desktop app vs terminal
 
 Both work, and they share the same configuration. The desktop app and the `claude` CLI

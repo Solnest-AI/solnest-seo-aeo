@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  @page {
+    size: A4;
+    margin: 22mm 18mm 25mm 18mm;
+    @bottom-center {
+      content: "Page " counter(page) " of " counter(pages);
+      font-size: 9pt;
+      color: #6b7280;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+    @bottom-left {
+      content: "Confidential";
+      font-size: 7pt;
+      color: #d6d3cc;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+    @bottom-right {
+      content: "solnestai.com Google SEO Report";
+      font-size: 8pt;
+      color: #cbd5e1;
+      font-family: 'DejaVu Serif', 'Times New Roman', Georgia, serif;
+    }
+  }
+
+  @page :first {
+    margin: 0;
+    @bottom-left { content: none; }
+    @bottom-center { content: none; }
+    @bottom-right { content: none; }
+  }
+
+  @page toc {
+    @bottom-center {
+      content: counter(page);
+      font-size: 9pt;
+      color: #6b7280;
+    }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Times New Roman', 'DejaVu Serif', Georgia, serif;
+    font-size: 10pt;
+    line-height: 1.55;
+    color: #1e293b;
+    background: white;
+  }
+
+  /* ─── Title Page (Clean White) ─── */
+  .title-page {
+    page: first;
+    width: 210mm;
+    height: 297mm;
+    background: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #1a1a2e;
+    position: relative;
+    padding: 50mm 30mm 40mm 30mm;
+    border-top: 6mm solid #1e3a5f;
+  }
+
+  .title-page .badge {
+    background: #f7f6f3;
+    border: 1px solid #d6d3cc;
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 9pt;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 15mm;
+    color: #1e3a5f;
+  }
+
+  .title-page h1 {
+    font-size: 28pt;
+    font-weight: bold;
+    margin-bottom: 5mm;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    color: #1a1a2e;
+  }
+
+  .title-page .subtitle {
+    font-size: 13pt;
+    color: #6b7280;
+    margin-bottom: 12mm;
+    font-weight: 300;
+  }
+
+  .title-page .url {
+    font-size: 12pt;
+    color: #1e3a5f;
+    margin-bottom: 15mm;
+    padding: 4mm 8mm;
+    border: 1px solid #d6d3cc;
+    border-radius: 6px;
+    background: #faf9f7;
+  }
+
+  .title-page .score-box {
+    background: #faf9f7;
+    border: 2px solid #d6d3cc;
+    border-radius: 12px;
+    padding: 6mm 12mm;
+    margin-bottom: 15mm;
+  }
+
+  .title-page .score-number {
+    font-size: 42pt;
+    font-weight: bold;
+    color: #1e3a5f;
+    line-height: 1;
+  }
+
+  .title-page .score-label {
+    font-size: 10pt;
+    color: #6b7280;
+    margin-top: 2mm;
+  }
+
+  .title-page .meta {
+    font-size: 9pt;
+    color: #6b7280;
+    margin-top: 8mm;
+    padding-top: 5mm;
+    border-top: 1px solid #d6d3cc;
+  }
+
+  .title-page .meta span {
+    margin: 0 8px;
+  }
+
+  /* ─── Table of Contents ─── */
+  .toc-page {
+    page: toc;
+    page-break-before: always;
+  }
+
+  .toc-page h2 {
+    font-size: 18pt;
+    color: #1e3a5f;
+    margin-bottom: 8mm;
+    padding-bottom: 3mm;
+    border-bottom: 2px solid #1e3a5f;
+  }
+
+  .toc-list {
+    list-style: none;
+    padding: 0;
+  }
+
+  .toc-list li {
+    padding: 2mm 0;
+    border-bottom: 1px solid #f1f5f9;
+    overflow: hidden;
+  }
+
+  .toc-list li.toc-section {
+    font-weight: bold;
+    font-size: 11pt;
+    padding-top: 4mm;
+    color: #0f172a;
+  }
+
+  .toc-list li.toc-sub {
+    padding-left: 8mm;
+    font-size: 9.5pt;
+    color: #475569;
+  }
+
+  .toc-score {
+    display: inline-block;
+    float: right;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 9pt;
+    font-weight: bold;
+    color: white;
+  }
+
+  .score-good { background: #2d6a4f; }
+  .score-warn { background: #d4740e; }
+  .score-bad { background: #c53030; }
+
+  /* ─── Section Styles ─── */
+  div.section {
+    page-break-before: always;
+  }
+
+  .section-header {
+    background: #faf9f7;
+    border-left: 4px solid #1e3a5f;
+    padding: 5mm 6mm;
+    margin-bottom: 6mm;
+    page-break-after: avoid;
+  }
+
+  .section-header h2 {
+    font-size: 16pt;
+    color: #0f172a;
+    margin-bottom: 1mm;
+  }
+
+  .section-header .section-score {
+    font-size: 12pt;
+    font-weight: bold;
+    float: right;
+    margin-top: -6mm;
+  }
+
+  h3 {
+    font-size: 12pt;
+    color: #1e3a5f;
+    margin-top: 6mm;
+    margin-bottom: 3mm;
+    padding-bottom: 1.5mm;
+    border-bottom: 1px solid #d6d3cc;
+    page-break-after: avoid;
+  }
+
+  h4 {
+    font-size: 10.5pt;
+    color: #334155;
+    margin-top: 4mm;
+    margin-bottom: 2mm;
+    page-break-after: avoid;
+  }
+
+  p {
+    margin-bottom: 3mm;
+    color: #334155;
+  }
+
+  .highlight {
+    background: #fef3c7;
+    border-left: 3px solid #d4740e;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .critical-box {
+    background: #fef2f2;
+    border-left: 3px solid #c53030;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .success-box {
+    background: #f0fdf4;
+    border-left: 3px solid #2d6a4f;
+    padding: 3mm 4mm;
+    margin: 4mm 0;
+    font-size: 9.5pt;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  /* ─── Tables ─── */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4mm 0 6mm 0;
+    font-size: 9pt;
+  }
+
+  thead th {
+    background: #f7f6f3;
+    color: #0f172a;
+    font-weight: bold;
+    padding: 3mm 4mm;
+    text-align: left;
+    border-bottom: 2px solid #d6d3cc;
+    font-size: 9pt;
+  }
+
+  tbody td {
+    padding: 2.5mm 3mm;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) {
+    background: #fdfcfa;
+  }
+
+  .status-pass {
+    color: #2d6a4f;
+    font-weight: bold;
+  }
+
+  .status-fail {
+    color: #c53030;
+    font-weight: bold;
+  }
+
+  .status-warn {
+    color: #d4740e;
+    font-weight: bold;
+  }
+
+  .status-partial {
+    color: #4a5568;
+    font-weight: bold;
+  }
+
+  /* ─── Charts ─── */
+  .chart-container {
+    text-align: center;
+    margin: 4mm 0;
+  }
+
+  .chart-container img {
+    max-width: 100%;
+    max-height: 120mm;
+    height: auto;
+  }
+
+  .chart-caption {
+    font-size: 8.5pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 2mm;
+    text-align: center;
+  }
+
+  .chart-half {
+    display: inline-block;
+    width: 48%;
+    vertical-align: top;
+    text-align: center;
+    margin: 2mm 0;
+  }
+
+  .chart-half img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* ─── Two column layout ─── */
+  .two-col {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin: 3mm 0;
+  }
+
+  .two-col .col {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0 2mm;
+  }
+
+  .four-col {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    margin: 3mm 0;
+  }
+
+  .four-col .col {
+    display: table-cell;
+    vertical-align: top;
+    padding: 0 1.5mm;
+  }
+
+  /* ─── Metric Cards ─── */
+  .metric-card {
+    background: #faf9f7;
+    border: 1px solid #d6d3cc;
+    border-radius: 6px;
+    padding: 2.5mm 3mm;
+    text-align: center;
+    margin: 2mm 0;
+  }
+
+  .metric-card .value {
+    font-size: 14pt;
+    font-weight: bold;
+    line-height: 1.2;
+  }
+
+  .metric-card .label {
+    font-size: 7.5pt;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 1mm;
+  }
+
+  /* ─── Action Plan ─── */
+  .action-item {
+    background: #faf9f7;
+    border-radius: 4px;
+    padding: 3mm 4mm;
+    margin: 3mm 0;
+    border-left: 3px solid #cbd5e1;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .action-item.critical {
+    border-left-color: #c53030;
+    background: #fdf2f2;
+  }
+
+  .action-item.high {
+    border-left-color: #d4740e;
+    background: #fdf8ef;
+  }
+
+  .action-item.medium {
+    border-left-color: #1e3a5f;
+    background: #f0f4f8;
+  }
+
+  .action-item.low {
+    border-left-color: #94a3b8;
+  }
+
+  .action-item h4 {
+    margin-top: 0;
+    margin-bottom: 1.5mm;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .action-item .effort {
+    font-size: 8.5pt;
+    color: #64748b;
+    float: right;
+  }
+
+  .priority-tag {
+    display: inline-block;
+    padding: 0.5mm 3mm;
+    border-radius: 3px;
+    font-size: 8pt;
+    font-weight: bold;
+    color: white;
+    margin-right: 2mm;
+    vertical-align: middle;
+  }
+
+  .priority-critical { background: #c53030; }
+  .priority-high { background: #d4740e; }
+  .priority-medium { background: #1e3a5f; }
+  .priority-low { background: #94a3b8; }
+
+  /* ─── Code blocks ─── */
+  .code-block {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 3mm 4mm;
+    border-radius: 4px;
+    font-family: 'DejaVu Sans Mono', monospace;
+    font-size: 8pt;
+    line-height: 1.6;
+    margin: 3mm 0;
+    white-space: pre-wrap;
+    word-break: break-all;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  /* ─── Divider ─── */
+  .divider {
+    border: none;
+    border-top: 1px solid #d6d3cc;
+    margin: 5mm 0;
+  }
+
+  /* ─── Roadmap ─── */
+  .roadmap-phase {
+    background: #faf9f7;
+    border-radius: 6px;
+    padding: 4mm 5mm;
+    margin: 4mm 0;
+    border: 1px solid #d6d3cc;
+    /* allow page breaks to prevent white gaps */
+  }
+
+  .roadmap-phase h4 {
+    margin-top: 0;
+    border-bottom: none;
+    color: #1e3a5f;
+  }
+
+  .roadmap-phase ul {
+    margin: 2mm 0 0 5mm;
+    padding: 0;
+  }
+
+  .roadmap-phase li {
+    margin-bottom: 1.5mm;
+    font-size: 9.5pt;
+    color: #334155;
+  }
+
+  /* ─── Lists ─── */
+  ul {
+    margin-left: 5mm;
+    margin-bottom: 3mm;
+  }
+
+  li {
+    margin-bottom: 1.5mm;
+  }
+
+  /* ─── Data freshness ─── */
+  .data-freshness {
+    font-size: 8pt;
+    color: #6b7280;
+    font-style: italic;
+    margin-top: 4mm;
+    padding-top: 2mm;
+    border-top: 1px solid #d6d3cc;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ======================================================= TITLE PAGE === -->
+<div class="title-page">
+  <div class="badge">Full SEO Audit Report</div>
+  <h1>solnestai.com</h1>
+  <div class="subtitle">Prepared by Claude SEO</div>
+  <div class="score-box">
+    <div class="score-number">52<span style="font-size: 20pt; color: #94a3b8;">/100</span></div>
+    <div class="score-label">SEO Health Score</div>
+  </div>
+  <div class="meta">
+    <span>August 25, 2026</span>
+    <span>Full Audit</span>
+  </div>
+</div>
+
+
+<!-- ======================================================= TABLE OF CONTENTS === -->
+<div class="toc-page">
+  <h2>Table of Contents</h2>
+  <ul class="toc-list">
+    <li class="toc-section"><span>1. Executive Summary</span></li>
+    <li class="toc-sub"><span>Key Metrics, Critical Issues &amp; Quick Wins</span></li>
+    <li class="toc-section"><span>2. Audit Categories</span></li>
+    <li class="toc-sub"><span>What Works</span></li>
+    <li class="toc-sub"><span>Findings by Severity</span></li>
+    <li class="toc-section"><span>3. Action Plan</span></li>
+    <li class="toc-sub"><span>Phased Roadmap</span></li>
+    <li class="toc-section"><span>4. Data Sources &amp; Methodology</span></li>
+  </ul>
+</div>
+
+
+<!-- ======================================================= 1. EXECUTIVE SUMMARY === -->
+<div class="section">
+  <div class="section-header">
+    <h2>1. Executive Summary</h2>
+  </div>
+
+  <p>This report presents a comprehensive SEO audit of <strong>solnestai.com</strong> for a <strong>B2B AI implementation agency (service business, STR/real-estate/med-spa vertical focus)</strong> site, generated on August 25, 2026. Findings combine technical, content, schema, performance, visual, and search-readiness evidence as available.</p>
+
+  <div class="two-col">
+    <div class="col">
+      <div class="metric-card">
+        <div class="value" style="color: #d4740e;">52/100</div>
+        <div class="label">SEO Health Score</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="critical-box">
+    <strong>Critical Issues Found:</strong>
+    <ol>
+      <li><strong>Info:</strong> Six of eight pages declare the homepage as their canonical, instructing Google not to index them</li>
+      <li><strong>Info:</strong> Five pages share a byte-identical title tag and meta description</li>
+      <li><strong>Info:</strong> /work carries 2,789 words of portfolio content and is canonicalised away to the homepage</li>
+      <li><strong>Info:</strong> No page contains a self-contained answer block; longest paragraph on the homepage is 37 words</li>
+      <li><strong>Info:</strong> Zero percentages and zero dollar figures appear in extractable text across the site</li>
+    </ol>
+  </div>
+
+  <div class="success-box">
+    <strong>Quick Wins:</strong>
+    <ol>
+      <li>Set a self-referencing canonical on /about, /services, /work, /book and /webinar</li>
+      <li>Write unique title tags and meta descriptions for those five pages</li>
+      <li>Remove the duplicated brand suffix in the /webinar title</li>
+      <li>Add width and height to the six homepage images missing them</li>
+      <li>Publish real pricing figures as quotable text</li>
+    </ol>
+  </div>
+
+</div>
+
+<!-- ======================================================= 2. AUDIT CATEGORIES === -->
+<div class="section">
+  <div class="section-header">
+    <h2>2. Audit Categories</h2>
+  </div>
+
+  <h3>2.1 Technical SEO</h3>
+  <p><strong>Score:</strong> <span class="status-fail">40/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>HTTPS enforced, clean 200 responses across all eight sitemap URLs</li>
+    <li>robots.txt present, valid, and explicitly permissive to AI search crawlers</li>
+    <li>sitemap.xml present and valid at /sitemap.xml with 8 URLs</li>
+    <li>meta robots is index, follow with no X-Robots-Tag override</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Six of eight pages canonicalise to the homepage <span class="status-warn">Critical</span></h4>
+    <p>/about, /services, /work, /book and /webinar all emit &lt;link rel=&quot;canonical&quot; href=&quot;https://solnestai.com&quot;&gt;. Verified directly against raw HTML, not through a parser. A canonical pointing at a different URL tells Google the page is a duplicate and should not be indexed in its own right. These are not duplicates: /work alone holds 2,789 words of unique portfolio content.</p>
+    <p><strong>Recommendation:</strong> Emit a self-referencing canonical on every page. /about should declare https://solnestai.com/about, and so on. This is almost certainly one shared layout component hardcoding the site root.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Core Web Vitals could not be measured <span class="status-warn">Info</span></h4>
+    <p>PageSpeed Insights returned a rate-limit error because no API key is configured. No field or lab data was collected, so no CWV claim is made in this report.</p>
+    <p><strong>Recommendation:</strong> Run /solnest-seo:seo google setup to add a free Google API key, then re-run for real CrUX field data.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.2 On-Page SEO</h3>
+  <p><strong>Score:</strong> <span class="status-fail">38/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Every page has exactly one H1</li>
+    <li>Heading hierarchy is clean, with 24 H3s under 8 H2s on the homepage</li>
+    <li>Homepage carries 17 internal links and a coherent structure</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Five pages share an identical title tag and meta description <span class="status-warn">Critical</span></h4>
+    <p>/, /about, /services, /work and /book all use the title &quot;Solnest AI - Watch What Happens When AI Meets Your Business&quot; and the same meta description verbatim. Duplicate titles across a small site are a strong duplicate-content signal and waste the highest-value on-page ranking element on four pages.</p>
+    <p><strong>Recommendation:</strong> Write a unique, intent-matched title and description per page. /services should target the service query, /work the proof query, /about the entity query.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Duplicated brand suffix in the /webinar title <span class="status-warn">Medium</span></h4>
+    <p>The title reads &quot;Live Demo - From Zero to Automated | Solnest AI | Solnest AI&quot;, repeating the brand twice. This is the signature of a template appending a suffix to a title that already contains one.</p>
+    <p><strong>Recommendation:</strong> Strip the brand from the page-level title or make the template suffix conditional.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.3 Content Quality</h3>
+  <p><strong>Score:</strong> <span class="status-warn">55/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>/work is substantial at 2,789 words</li>
+    <li>The blog post is a genuine 947-word comparison piece with 4 schema blocks</li>
+    <li>Copy is specific about verticals: short-term rentals, real estate, med spas</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Four pages are thin <span class="status-warn">High</span></h4>
+    <p>/book is 52 words, /blog is 59, /about is 292 and /webinar is 317. /about at 292 words is well short of what an entity-establishing page needs, and it is one of the pages AI systems read to decide who a company is.</p>
+    <p><strong>Recommendation:</strong> Prioritise /about and /services. Both are commercially important and both are currently too thin to rank or be cited.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.4 Schema and Structured Data</h3>
+  <p><strong>Score:</strong> <span class="status-pass">85/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Organization and ProfessionalService JSON-LD present on every page</li>
+    <li>Correct use of @id anchors such as #organization and #service</li>
+    <li>Blog post carries 4 schema blocks including article-level markup</li>
+    <li>Organization name is byte-identical to every other brand surface</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Schema is duplicated rather than page-specific <span class="status-warn">Low</span></h4>
+    <p>The same Organization and ProfessionalService pair appears on all pages. That is valid and harmless, but page-type schema is missing where it would earn rich results.</p>
+    <p><strong>Recommendation:</strong> Add Service schema on /services and FAQPage where genuine Q&amp;A exists. Note this is a rich-results play, not an AI-citation lever.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.5 Images</h3>
+  <p><strong>Score:</strong> <span class="status-warn">70/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>Zero missing alt attributes across all 8 pages, which is unusual and good</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Six homepage images lack width and height <span class="status-warn">Medium</span></h4>
+    <p>6 of 9 homepage images declare no intrinsic dimensions, which allows layout shift while they load and harms Cumulative Layout Shift.</p>
+    <p><strong>Recommendation:</strong> Add explicit width and height, or use the Next.js Image component which sets them automatically.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Only one image is lazy-loaded <span class="status-warn">Low</span></h4>
+    <p>1 of 9 homepage images uses loading=&quot;lazy&quot;.</p>
+    <p><strong>Recommendation:</strong> Lazy-load everything below the fold, keeping the LCP image eager.</p>
+  </div>
+  <hr class="divider">
+  <h3>2.6 AI Search Readiness</h3>
+  <p><strong>Score:</strong> <span class="status-warn">55/100</span></p>
+  <h4>What Works</h4>
+  <ul>
+    <li>All four search crawlers allowed in robots.txt and returning 200 at the CDN edge: OAI-SearchBot (ChatGPT), Claude-SearchBot (Claude), PerplexityBot (Perplexity), Googlebot (Google AI Overviews)</li>
+    <li>robots.txt correctly separates search crawlers from training crawlers, which most sites get wrong. OAI-SearchBot and Claude-SearchBot control citation; GPTBot and ClaudeBot are training only; Google-Extended has no effect on AI Overviews</li>
+    <li>Snippet-eligible: index, follow with no X-Robots-Tag override</li>
+    <li>Brand entity is byte-identical across all 5 machine-readable surfaces: title, og:site_name, jsonld:Organization, jsonld:ProfessionalService, llms.txt</li>
+    <li>AI visibility band: Readable</li>
+  </ul>
+  <h4>Findings</h4>
+  <div class="action-item medium">
+    <h4>Five pages are canonicalised to the homepage, blocking AI retrieval <span class="status-warn">Critical</span></h4>
+    <p>Google AI Overviews and AI Mode retrieve from the ordinary Search index. /about, /services, /work, /book and /webinar all declare https://solnestai.com as canonical, so they are not eligible to be retrieved or cited. Verified against raw HTML.</p>
+    <p><strong>Recommendation:</strong> Emit self-referencing canonicals. This is the single highest-leverage fix for both search and AI visibility.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Nothing on the site is quotable <span class="status-warn">High</span></h4>
+    <p>Main-content extraction yields 479 words from 1,921. The longest paragraph is 37 words against a 134 to 167 word target, with zero paragraphs over 40 words. Extractable text contains 0 percentages and 0 dollar figures. A model can read the page and has nothing to lift and attribute.</p>
+    <p><strong>Recommendation:</strong> Add two or three genuine 130 to 160 word answer blocks with real numbers. Published pricing is the most quotable asset available and is absent from extractable text.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Only two of eight homepage H2s are question-form <span class="status-warn">Medium</span></h4>
+    <p>Question-shaped headings match how people phrase prompts and how retrieval segments a page.</p>
+    <p><strong>Recommendation:</strong> Convert several H2s to the questions buyers actually ask.</p>
+  </div>
+  <div class="action-item medium">
+    <h4>Citability measurements <span class="status-warn">Info</span></h4>
+    <p>Extraction yields 479 of 1921 words (25%). Longest paragraph 37 words against a 134-167 target. Paragraphs over 40 words: 0. Percentages: 0. Dollar figures: 0. Question-form H2s: 2/8.</p>
+    <p><strong>Recommendation:</strong> Track these on re-audit. They are the concrete measures behind the citability score.</p>
+  </div>
+  <hr class="divider">
+</div>
+
+<!-- ======================================================= 3. ACTION PLAN === -->
+<div class="section">
+  <div class="section-header">
+    <h2>3. Action Plan</h2>
+  </div>
+
+  <div class="roadmap-phase">
+    <h4>Phase 1: Critical Fixes <span class="effort">Week 1</span></h4>
+    <ul>
+      <li>Set self-referencing canonicals on /about, /services, /work, /book, /webinar</li>
+      <li>Write unique titles and meta descriptions for those five pages</li>
+      <li>Remove the duplicated brand suffix in the /webinar title</li>
+      <li>Re-submit sitemap.xml in Search Console and request reindexing</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 2: High-Impact Improvements <span class="effort">Weeks 2-3</span></h4>
+    <ul>
+      <li>Expand /about and /services past thin-content thresholds</li>
+      <li>Add two or three 130 to 160 word quotable answer blocks with real numbers</li>
+      <li>Publish actual pricing as extractable text</li>
+      <li>Add width and height to the six homepage images missing them</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 3: Content and Authority <span class="effort">Month 2</span></h4>
+    <ul>
+      <li>Convert key H2s to question form</li>
+      <li>Add Service schema on /services</li>
+      <li>Pursue earned media and third-party mentions, which drive 84% of AI citations</li>
+      <li>Build out the blog, which currently holds one post</li>
+    </ul>
+  </div>
+  <div class="roadmap-phase">
+    <h4>Phase 4: Monitoring and Iteration <span class="effort">Ongoing</span></h4>
+    <ul>
+      <li>Capture a drift baseline so deploys can be diffed</li>
+      <li>Add a Google API key for real CrUX field data</li>
+      <li>Re-run the AEO audit monthly against a fixed prompt set and track the trend</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ======================================================= DATA SOURCES & METHODOLOGY === -->
+<div class="section" style="text-align: center; padding-top: 15mm;">
+  <hr class="divider">
+  <h3 style="text-align: left;">Data Sources &amp; Methodology</h3>
+  <table>
+    <thead>
+      <tr><th>Source</th><th>Description</th><th>Update Frequency</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>PageSpeed Insights API</td>
+          <td>Lighthouse lab audit (mobile emulation, Moto G Power, slow 4G)</td>
+          <td>Real-time</td></tr>
+      <tr><td>Chrome UX Report (CrUX)</td>
+          <td>28-day rolling field data from real Chrome users</td>
+          <td>Daily ~04:00 UTC</td></tr>
+      <tr><td>CrUX History API</td>
+          <td>25-week p75 trend data per metric</td>
+          <td>Weekly</td></tr>
+      <tr><td>Google Search Console</td>
+          <td>Search Analytics (clicks, impressions, CTR, position)</td>
+          <td>2-3 day lag</td></tr>
+      <tr><td>URL Inspection API</td>
+          <td>Per-URL index status, coverage state, crawl info</td>
+          <td>Real-time (2,000/day)</td></tr>
+    </tbody>
+  </table>
+  <p style="color: #94a3b8; font-size: 9pt; margin-top: 5mm;">
+    Report generated by Claude SEO &mdash; Google SEO Intelligence Skill &mdash; August 25, 2026<br>
+    Methodology based on Google Web Vitals thresholds, Search Console documentation, and Lighthouse scoring algorithms.
+  </p>
+</div>
+
+</body>
+</html>

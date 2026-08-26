@@ -179,3 +179,11 @@ id_rsa
 id_rsa.*
 id_ed25519
 id_ed25519.*
+
+# Solnest: the curated example audit under examples/ is intentionally committed.
+# Real audit runs elsewhere stay ignored by the rules above.
+!examples/**/FULL-AUDIT-REPORT.md
+!examples/**/ACTION-PLAN.md
+!examples/**/AEO-REPORT.md
+!examples/**/Google-SEO-Report-*.html
+!examples/**/Google-SEO-Report-*.pdf

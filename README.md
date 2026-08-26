@@ -67,6 +67,18 @@ The full command list is in [docs/COMMANDS.md](docs/COMMANDS.md).
 
 ---
 
+## See it before you install
+
+[`examples/solnestai.com-audit/`](examples/solnestai.com-audit/) holds a real, unedited run against
+our own site, including the generated PDF. It scored us 52 out of 100 and caught five of our own
+pages quietly telling Google not to index them. We left that in.
+
+New to this? [`docs/LESSON.md`](docs/LESSON.md) is the step-by-step walkthrough.
+Want every feature? [`docs/API-SETUP.md`](docs/API-SETUP.md) covers the optional integrations,
+free ones first, with what each actually costs.
+
+---
+
 ## What Solnest changed
 
 Four things, all of them things we hit while auditing real client sites.
