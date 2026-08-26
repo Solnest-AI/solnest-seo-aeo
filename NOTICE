@@ -38,4 +38,9 @@ Modifications made by Solnest AI on top of upstream v2.2.4:
     OpenAI and Anthropic, noted that Google-Extended has no effect on Google
     AI Overviews, and added edge/CDN verification guidance.
 
+  - skills/seo-aeo/SKILL.md: the AEO audit produced chat-only output while the
+    upstream seo-audit skill persisted a report directory. It now writes
+    AEO-REPORT.md and aeo-data.json into the same {domain}-audit/ directory, so
+    the SEO and AEO halves compose into one deliverable.
+
   - Branding, documentation, and plugin manifests.

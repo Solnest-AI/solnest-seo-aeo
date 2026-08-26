@@ -157,6 +157,68 @@ recommendation channel, not a traffic channel.
 
 ---
 
+---
+
+## Output files
+
+Persist the audit. Chat output disappears; a client deliverable should not.
+
+Write into the same `{domain}-audit/` directory the `seo-audit` skill uses, so the
+SEO and AEO halves compose into one folder and one report:
+
+- `{domain}-audit/AEO-REPORT.md`: the readable audit. Crawler access table, entity
+  diff, citability assessment, and the evidence-ordered recommendations.
+- `{domain}-audit/aeo-data.json`: structured results, in the shape below.
+
+Create the directory if it does not exist. If a `seo-audit` run already produced
+one, write alongside its files rather than overwriting anything.
+
+```json
+{
+  "url": "https://example.com",
+  "audited_at": "YYYY-MM-DD",
+  "band": "Blocked|Invisible|Readable|Citable",
+  "crawler_access": {
+    "robots_readable": true,
+    "blocking_issues": [],
+    "crawlers": [
+      {"crawler": "OAI-SearchBot", "role": "search", "engine": "ChatGPT",
+       "robots_allowed": true, "edge_status": 200, "edge_blocked": false}
+    ]
+  },
+  "entity": {
+    "consistent": true,
+    "surfaces": {"title": "", "og:site_name": "", "jsonld:Organization": "", "llms.txt": ""},
+    "mismatches": []
+  },
+  "citability": {
+    "extracted_words": 0,
+    "longest_paragraph_words": 0,
+    "blocks_over_40_words": 0,
+    "percentages": 0,
+    "dollar_figures": 0,
+    "question_form_headings": "0/0",
+    "snippet_eligible": true
+  },
+  "findings": [
+    {"title": "", "severity": "Critical|High|Medium|Low|Info",
+     "description": "", "recommendation": ""}
+  ]
+}
+```
+
+Both bundled scripts accept `--json`, so capture their output directly rather than
+retyping their results:
+
+```bash
+claude-seo run aeo_crawler_check.py <url> --json
+claude-seo run aeo_entity_check.py <url> --json
+```
+
+After writing the files, tell the user where they are. If `audit-data.json` from a
+`seo-audit` run is present in the same directory, offer to merge the AEO findings
+into it so they appear in the generated PDF or HTML report.
+
 ## Reporting
 
 Lead with what is broken and free to fix (crawler access, entity splits), then

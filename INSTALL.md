@@ -121,6 +121,16 @@ python3 -c "import json,pathlib;d=json.loads((pathlib.Path.home()/'.claude/setti
 Both should print `True`. If they do and the commands still are not there, you did
 not fully quit Claude Code. Quit the application, do not just close the tab.
 
+**PDF reports fail with a WeasyPrint error.** The audit's PDF export needs system
+graphics libraries that the Python setup cannot install for you. On macOS:
+
+```bash
+brew install pango gdk-pixbuf libffi
+```
+
+Without them everything else still works, and you can generate the styled HTML report
+instead by adding `--format html`. The Markdown report and action plan are unaffected.
+
 **You want it gone.** Everything lives in two settings keys plus one plugin cache
 directory:
 
