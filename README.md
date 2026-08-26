@@ -31,9 +31,9 @@ Prefer to do it by hand? Two slash commands:
 /plugin install solnest-seo@solnest-ai
 ```
 
-Then restart Claude Code and run `/seo setup`, which builds an isolated Python
+Then restart Claude Code and run `/solnest-seo:seo setup`, which builds an isolated Python
 environment and downloads Playwright Chromium. It takes about four minutes and installs
-nothing globally. Check it any time with `/seo doctor`.
+nothing globally. Check it any time with `/solnest-seo:seo doctor`.
 
 ### Before you install, check your Python
 

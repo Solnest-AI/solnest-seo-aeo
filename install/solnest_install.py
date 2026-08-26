@@ -105,7 +105,7 @@ def install() -> int:
 
     print("\nNext:")
     print("  1. Restart Claude Code. It clones the marketplace and installs the plugin.")
-    print("  2. Run:  /seo setup           (builds an isolated Python env, ~4 minutes)")
+    print("  2. Run:  /solnest-seo:seo setup           (builds an isolated Python env, ~4 minutes)")
     print("  3. Try:  /solnest-seo:seo-aeo https://yoursite.com")
     return 0
 

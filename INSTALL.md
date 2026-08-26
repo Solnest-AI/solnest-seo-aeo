@@ -38,7 +38,7 @@ Solnest marketplace and installs the plugin. Do not skip the restart.
 
 STEP 4. After I confirm I have restarted, tell me to run:
 
-    /seo setup
+    /solnest-seo:seo setup
 
 That builds an isolated Python environment and downloads a headless browser. It
 takes about four minutes and installs nothing globally. Then I am ready to go.
@@ -65,7 +65,7 @@ AI visibility audit. Whether ChatGPT, Claude, Perplexity, Gemini and Google AI
 Overviews can find, read and cite you, ordered by what the evidence actually
 supports.
 
-Run `/seo doctor` any time to confirm the environment is healthy.
+Run `/solnest-seo:seo doctor` any time to confirm the environment is healthy.
 
 ## Desktop app vs terminal
 
@@ -84,7 +84,7 @@ chat is not enough, because the plugin is loaded when the app starts.
 
 macOS apps launched from the Dock do not always inherit your shell's PATH. A bare macOS
 environment resolves `python3` to `/usr/bin/python3`, which is **3.9.6** and below the
-minimum. If `/seo setup` reports that it needs Python 3.10 or newer even though you know
+minimum. If `/solnest-seo:seo setup` reports that it needs Python 3.10 or newer even though you know
 you installed a newer one, point it at your real interpreter directly.
 
 Find it:
@@ -103,7 +103,7 @@ Then set that path once, in `~/.claude/settings.json` under `env`:
 }
 ```
 
-Restart, and run `/seo doctor`. It should print `Runtime: ready`. Use the path `which
+Restart, and run `/solnest-seo:seo doctor`. It should print `Runtime: ready`. Use the path `which
 python3` gave you; the one above is the common Apple Silicon Homebrew location.
 
 ## If something goes wrong
