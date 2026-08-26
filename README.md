@@ -16,34 +16,61 @@ Built by [Solnest AI](https://solnestai.com) for the Solnest AI community.
 
 ---
 
-## Install
+## Setup
 
-**Paste one block into Claude Code and it sets itself up.** See [INSTALL.md](INSTALL.md)
-for the block and the troubleshooting notes.
+**Paste this page's URL into Claude Code and say "set this up".** Claude reads the steps below
+and does the whole thing. You approve the commands as they come.
 
-Prefer to do it by hand? Two slash commands:
+Prefer to read first? The same steps are in [INSTALL.md](INSTALL.md) with troubleshooting.
 
-```bash
-/plugin marketplace add Solnest-AI/solnest-seo-aeo
-```
+### Setup instructions (Claude: follow these exactly)
 
-```bash
-/plugin install solnest-seo@solnest-ai
-```
+> **Claude, read this before acting.** Do not use `/plugin marketplace add` or `/plugin install`.
+> Those are interactive slash commands that only the human can type, and you cannot run them for
+> them. Use the four steps below, which install the plugin declaratively. Do them in order and stop
+> if any step fails.
 
-Then restart Claude Code and run `/solnest-seo:seo setup`, which builds an isolated Python
-environment and downloads Playwright Chromium. It takes about four minutes and installs
-nothing globally. Check it any time with `/solnest-seo:seo doctor`.
-
-### Before you install, check your Python
+**Step 1. Check their Python.** Run:
 
 ```bash
 python3 --version
 ```
 
-You need **3.10 or newer**. macOS still ships `/usr/bin/python3` at 3.9, so if that command
-prints 3.9 anything, install a current Python (`brew install python`) and then start over.
-This is the single most common install failure.
+It must be 3.10 or newer. macOS ships 3.9 at `/usr/bin/python3`. If you see 3.9.x, stop and tell
+them to run `brew install python`, then start over. This is the most common install failure.
+
+**Step 2. Register the plugin.** This merges two keys into `~/.claude/settings.json` and backs the
+file up first. It must not remove any of their existing settings. Run:
+
+```bash
+python3 -c "
+import json,os,shutil,sys,datetime,pathlib
+p=pathlib.Path.home()/'.claude'/'settings.json'
+s=json.loads(p.read_text()) if p.is_file() and p.read_text().strip() else {}
+m={'source':{'source':'github','repo':'Solnest-AI/solnest-seo-aeo'}}
+if s.get('extraKnownMarketplaces',{}).get('solnest-ai')==m and s.get('enabledPlugins',{}).get('solnest-seo@solnest-ai'): print('Already installed.'); sys.exit()
+if p.is_file(): b=p.with_name('settings.json.bak-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')); shutil.copy2(p,b); print('Backup:',b.name)
+s.setdefault('extraKnownMarketplaces',{})['solnest-ai']=m
+s.setdefault('enabledPlugins',{})['solnest-seo@solnest-ai']=True
+p.parent.mkdir(parents=True,exist_ok=True); t=p.with_suffix('.json.tmp'); t.write_text(json.dumps(s,indent=2)+chr(10)); os.replace(t,p)
+print('Installed. Kept',len(s),'settings keys and',len(s['enabledPlugins'])-1,'other plugins.')
+"
+```
+
+**Step 3. Tell them to fully quit and reopen Claude Code.** Cmd+Q on Mac, or quit from the system
+tray on Windows. Closing a tab or starting a new chat is not enough, because plugins load at
+startup. Wait for them to confirm before continuing.
+
+**Step 4. After they confirm the restart, tell them to run:**
+
+```
+/solnest-seo:seo setup
+```
+
+That builds an isolated Python environment and downloads a headless browser. It takes about four
+minutes and installs nothing globally. Then they are ready.
+
+Then point them at the two commands below.
 
 ---
 

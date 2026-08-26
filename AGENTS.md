@@ -1,4 +1,12 @@
-# Claude SEO: Multi-Platform Agent Instructions
+# Solnest SEO/AEO: Multi-Platform Agent Instructions
+
+> **If a user pasted this repository's URL and asked you to "set this up", you are in the wrong
+> file.** This file is for developing and porting the plugin. Installation instructions are in
+> [README.md](README.md#setup) and [INSTALL.md](INSTALL.md). Go there instead.
+>
+> In particular: do **not** run `./bin/claude-seo ...` from this repository to install. A user
+> installing the plugin does not clone it, and does not have these paths.
+
 
 > For **Cursor**, **Cursor Cloud Agents**, **Google Antigravity**, **Gemini CLI**,
 > **Grok Build**,
