@@ -191,7 +191,10 @@ def check_runtime_invocations(texts):
 
 
 def check_routing(files):
-    cmd_pat = re.compile(r'`/seo(?:\s+([a-z][a-z0-9-]*))?')
+    # docs/COMMANDS.md uses the plugin-qualified `/solnest-seo:seo ...` form
+    # (that is what actually resolves in Claude Code); skills/seo/SKILL.md keeps
+    # upstream's bare `/seo ...` so upstream merges stay clean. Accept both.
+    cmd_pat = re.compile(r'`/(?:solnest-seo:)?seo(?:\s+([a-z][a-z0-9-]*))?')
     tables = {src: {m for m in cmd_pat.findall(read(src)) if m}
               for src in ("skills/seo/SKILL.md", "docs/COMMANDS.md")}
     skill_tokens = {d.split("/")[1][4:] for d in files

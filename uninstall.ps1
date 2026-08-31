@@ -1,5 +1,5 @@
 #!/usr/bin/env pwsh
-# claude-seo manual-install uninstaller (Windows)
+# solnest-seo-aeo manual-install uninstaller (Windows)
 #
 # Removes the orchestrator skill (~/.claude/skills/seo), all sub-skills
 # (~/.claude/skills/seo-*), and all sub-agents (~/.claude/agents/seo-*.md).
@@ -9,8 +9,8 @@
 # uninstaller.
 #
 # Plugin-install users should use Claude Code's own command instead:
-#   /plugin uninstall claude-seo@agricidaniel-claude-seo
-#   /plugin marketplace remove AgriciDaniel/claude-seo
+#   /plugin uninstall solnest-seo@solnest-ai
+#   /plugin marketplace remove Solnest-AI/solnest-seo-aeo
 
 $ErrorActionPreference = "Stop"
 
@@ -22,7 +22,7 @@ function Main {
     $SkillDir = Join-Path $env:USERPROFILE ".claude" "skills"
     $AgentDir = Join-Path $env:USERPROFILE ".claude" "agents"
 
-    Write-Color Cyan "=== Uninstalling claude-seo ==="
+    Write-Color Cyan "=== Uninstalling Solnest SEO/AEO ==="
     Write-Host ""
 
     $removedSkills = 0
@@ -56,12 +56,12 @@ function Main {
 
     Write-Host ""
     if ($removedSkills -eq 0 -and $removedAgents -eq 0) {
-        Write-Color Yellow "Nothing to remove. Claude SEO does not appear to be installed."
+        Write-Color Yellow "Nothing to remove. Solnest SEO/AEO does not appear to be installed."
         Write-Color Yellow "If you installed via /plugin install, run /plugin uninstall instead."
         return
     }
 
-    Write-Color Cyan "=== claude-seo uninstalled ($removedSkills skill dirs, $removedAgents agent files) ==="
+    Write-Color Cyan "=== Solnest SEO/AEO uninstalled ($removedSkills skill dirs, $removedAgents agent files) ==="
     Write-Host ""
     Write-Color Yellow "Restart Claude Code to complete removal."
 }

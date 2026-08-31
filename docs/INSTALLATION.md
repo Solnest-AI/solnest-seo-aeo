@@ -1,5 +1,10 @@
 # Installation Guide
 
+> **The supported install is [INSTALL.md](../INSTALL.md).** Paste one block into Claude Code
+> and it registers the plugin for you. This page covers the manual install, where the skills
+> are copied into `~/.claude/skills/` instead. Pick one. Running both leaves you with two
+> copies of every skill.
+
 ## Prerequisites
 
 - **Python 3.10+** with pip
@@ -16,26 +21,30 @@ Optional:
 The recommended path. Inside Claude Code:
 
 ```
-/plugin marketplace add AgriciDaniel/claude-seo
-/plugin install claude-seo@agricidaniel-claude-seo
-/seo setup
+/plugin marketplace add Solnest-AI/solnest-seo-aeo
+/plugin install solnest-seo@solnest-ai
+/solnest-seo:seo setup
 ```
 
-Plugin installation does not run package managers. `/seo setup` is an explicit,
+You have to type these yourself — they are interactive slash commands, so Claude cannot run
+them for you. If the `/plugin` browser is not available in your client, use the declarative
+block in [INSTALL.md](../INSTALL.md) instead.
+
+Plugin installation does not run package managers. `/solnest-seo:seo setup` is an explicit,
 one-time provisioning step that writes the virtual environment and browser only
-to Claude's persistent plugin data. Use `/seo doctor` for a read-only check.
+to Claude's persistent plugin data. Use `/solnest-seo:seo doctor` for a read-only check.
 
 ### Manual Install (Unix, macOS, Linux)
 
 ```bash
-git clone --depth 1 https://github.com/AgriciDaniel/claude-seo.git
-bash claude-seo/install.sh
+git clone --depth 1 https://github.com/Solnest-AI/solnest-seo-aeo.git
+bash solnest-seo-aeo/install.sh
 ```
 
 Review-then-run alternative:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/AgriciDaniel/claude-seo/main/install.sh > install.sh
+curl -fsSL https://raw.githubusercontent.com/Solnest-AI/solnest-seo-aeo/main/install.sh > install.sh
 cat install.sh        # review
 bash install.sh       # run when satisfied
 rm install.sh
@@ -44,8 +53,8 @@ rm install.sh
 ### Manual Install (Windows, PowerShell)
 
 ```powershell
-git clone --depth 1 https://github.com/AgriciDaniel/claude-seo.git
-powershell -ExecutionPolicy Bypass -File claude-seo\install.ps1
+git clone --depth 1 https://github.com/Solnest-AI/solnest-seo-aeo.git
+powershell -ExecutionPolicy Bypass -File solnest-seo-aeo\install.ps1
 ```
 
 The Windows path uses `git clone` rather than `irm | iex` because Claude Code's own security guardrails flag piped remote-script execution. Inspect `install.ps1` before running.
@@ -55,8 +64,8 @@ The Windows path uses `git clone` rather than `irm | iex` because Claude Code's 
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/AgriciDaniel/claude-seo.git
-cd claude-seo
+git clone https://github.com/Solnest-AI/solnest-seo-aeo.git
+cd solnest-seo-aeo
 ```
 
 2. **Run the installer**
@@ -111,15 +120,15 @@ You should see a help message or prompt for a URL.
 If installed as a plugin:
 
 ```
-/plugin uninstall claude-seo@agricidaniel-claude-seo
-/plugin marketplace remove AgriciDaniel/claude-seo
+/plugin uninstall solnest-seo@solnest-ai
+/plugin marketplace remove Solnest-AI/solnest-seo-aeo
 ```
 
 If installed manually, run the uninstaller from a fresh clone:
 
 ```bash
-git clone --depth 1 https://github.com/AgriciDaniel/claude-seo.git
-bash claude-seo/uninstall.sh
+git clone --depth 1 https://github.com/Solnest-AI/solnest-seo-aeo.git
+bash solnest-seo-aeo/uninstall.sh
 ```
 
 `uninstall.sh` removes all installed sub-skills, sub-agents, and the plugin's MCP entries from `~/.claude/settings.json`. Do not maintain a hand-coded `rm` list. The shipped uninstaller is the canonical source.
@@ -132,10 +141,10 @@ Caution: Prefer downloading, inspecting, then running remote scripts; the pipe-t
 
 ```bash
 # Uninstall current version
-curl -fsSL https://raw.githubusercontent.com/AgriciDaniel/claude-seo/main/uninstall.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Solnest-AI/solnest-seo-aeo/main/uninstall.sh | bash
 
 # Install new version
-curl -fsSL https://raw.githubusercontent.com/AgriciDaniel/claude-seo/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/Solnest-AI/solnest-seo-aeo/main/install.sh | bash
 ```
 
 ## Troubleshooting

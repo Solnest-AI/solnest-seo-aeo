@@ -5,6 +5,64 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - Solnest fork
+
+### Fixed
+
+- **Installers pointed at the upstream repo.** `install.sh` and `install.ps1` cloned
+  `AgriciDaniel/claude-seo`, so anyone who cloned this repo and ran the obvious
+  `bash install.sh` installed upstream v2.2.4 into `~/.claude/skills/` and got none of the
+  Solnest additions. Both now clone `Solnest-AI/solnest-seo-aeo`, and fall back to the
+  default branch when the pinned tag is not published rather than aborting silently.
+- **`docs/INSTALLATION.md` sent users to the upstream plugin.** Its "recommended path"
+  ran `/plugin marketplace add AgriciDaniel/claude-seo` and
+  `/plugin install claude-seo@agricidaniel-claude-seo`. Corrected to
+  `Solnest-AI/solnest-seo-aeo` and `solnest-seo@solnest-ai`, with a pointer to `INSTALL.md`
+  as the supported path. Same identifiers swept out of `docs/TROUBLESHOOTING.md`,
+  `docs/MIGRATION-v1-to-v2.md`, `uninstall.sh` and `uninstall.ps1`.
+- **`docs/COMMANDS.md` documented commands that do not resolve.** Every command was written
+  as bare `/seo ...`, but plugin skills resolve as `/plugin:skill`, so a reader copying from
+  the command reference got nothing. All commands now carry the `/solnest-seo:` prefix used by
+  `README.md` and `INSTALL.md`. The routing gate in `scripts/consistency_check.py` accepts
+  both forms, so `skills/seo/SKILL.md` keeps upstream's bare form and merges stay clean.
+- **`README.md` upstream-sync command failed on a fresh clone.** `git fetch upstream` had no
+  remote to fetch from; the `git remote add upstream` step is now shown first.
+- **`README.md` test count was upstream's stale figure.** Claimed 410; the suite is 422
+  (410 upstream + 12 covering the Solnest changes). Verified with `pytest tests/ -q`.
+- **`docs/WORKFLOW-public-private.md` described a topology this repo does not have.** Marked
+  as upstream's own release process, kept verbatim only so upstream merges stay clean.
+
+## [2.2.4-solnest] - 2026-08-18
+
+Solnest AI fork of `AgriciDaniel/claude-seo` v2.2.4, MIT. Upstream's release history continues
+unchanged below. Four functional changes, all found while auditing real client sites.
+
+### Added
+
+- **`skills/seo-aeo/`.** A dedicated AI-visibility audit, ordered by evidence strength:
+  crawler access, then ranking, then earned media, then quotable specifics. States outright
+  that schema and `llms.txt` are not citation levers.
+- **`scripts/aeo_crawler_check.py`.** Verifies AI search-crawler access at two layers, not just
+  robots.txt, because a permissive robots.txt means nothing if a CDN or WAF 403s those user
+  agents before the request reaches the origin. Separates training crawlers (`GPTBot`,
+  `ClaudeBot`) from the citation crawlers that actually matter (`OAI-SearchBot`,
+  `Claude-SearchBot`); upstream did not list `Claude-SearchBot` at all.
+- **`scripts/aeo_entity_check.py`.** Diffs the brand name across `<title>`, `og:site_name`,
+  JSON-LD `Organization`/`LocalBusiness` and `llms.txt`, catching near-miss typos and
+  truncated names that split a brand across retrieval systems.
+
+### Fixed
+
+- **Silent zero in `scripts/parse_html.py`.** Upstream gated link analysis behind an optional
+  `--url` flag and printed `Internal Links: 0` when it was omitted, which reads as "no internal
+  links" rather than "not measured". It now falls back to the page's own canonical or `og:url`
+  and reports "not analyzed" when it genuinely cannot tell.
+
+### Changed
+
+- Plugin and marketplace manifests, branding, and documentation rebranded to Solnest AI.
+  Upstream's internal skill and script names were deliberately left alone so merges stay clean.
+
 ## [2.2.4] - 2026-07-20
 
 Community maintenance release following a full review of every open issue and pull request.

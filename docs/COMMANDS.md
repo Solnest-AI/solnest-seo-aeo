@@ -2,28 +2,32 @@
 
 ## Overview
 
-All Claude SEO commands start with `/seo` followed by a subcommand.
+All Solnest SEO/AEO commands start with `/solnest-seo:seo` followed by a subcommand.
+The `/solnest-seo:` prefix is the plugin id. Claude Code resolves plugin skills as
+`/plugin-name:skill-name`, so the bare `/seo` form does not resolve.
+
+The AI-visibility audit is its own skill and takes no subcommand: `/solnest-seo:seo-aeo <url>`.
 
 ## Command List
 
-### `/seo setup`
+### `/solnest-seo:seo setup`
 
 Explicitly create or refresh the isolated Python runtime and Playwright Chromium.
 This is required once after a marketplace plugin install. Manual installers run
 the same setup automatically. It never installs packages globally.
 
-### `/seo doctor`
+### `/solnest-seo:seo doctor`
 
 Check runtime, dependency, and Chromium readiness without changing the system.
 Diagnostic output omits absolute paths and environment values.
 
-### `/seo audit <url>`
+### `/solnest-seo:seo audit <url>`
 
 Full website SEO audit with parallel analysis.
 
 **Example:**
 ```
-/seo audit https://example.com
+/solnest-seo:seo audit https://example.com
 ```
 
 **What it does:**
@@ -40,13 +44,13 @@ Full website SEO audit with parallel analysis.
 
 ---
 
-### `/seo page <url>`
+### `/solnest-seo:seo page <url>`
 
 Deep single-page analysis.
 
 **Example:**
 ```
-/seo page https://example.com/about
+/solnest-seo:seo page https://example.com/about
 ```
 
 **What it analyzes:**
@@ -59,13 +63,13 @@ Deep single-page analysis.
 
 ---
 
-### `/seo technical <url>`
+### `/solnest-seo:seo technical <url>`
 
 Technical SEO audit across 9 categories.
 
 **Example:**
 ```
-/seo technical https://example.com
+/solnest-seo:seo technical https://example.com
 ```
 
 **Categories:**
@@ -81,13 +85,13 @@ Technical SEO audit across 9 categories.
 
 ---
 
-### `/seo content <url>`
+### `/solnest-seo:seo content <url>`
 
 E-E-A-T and content quality analysis.
 
 **Example:**
 ```
-/seo content https://example.com/blog/post
+/solnest-seo:seo content https://example.com/blog/post
 ```
 
 **What it evaluates:**
@@ -100,13 +104,13 @@ E-E-A-T and content quality analysis.
 
 ---
 
-### `/seo content-brief <topic or url>`
+### `/solnest-seo:seo content-brief <topic or url>`
 
 Generate a detailed SEO content brief: target keywords, search intent, heading outline, internal link targets, and competitor angle.
 
 **Example:**
 ```
-/seo content-brief "best running shoes for flat feet"
+/solnest-seo:seo content-brief "best running shoes for flat feet"
 ```
 
 **What it produces:**
@@ -118,13 +122,13 @@ Generate a detailed SEO content brief: target keywords, search intent, heading o
 
 ---
 
-### `/seo schema <url>`
+### `/solnest-seo:seo schema <url>`
 
 Schema markup detection, validation, and generation.
 
 **Example:**
 ```
-/seo schema https://example.com
+/solnest-seo:seo schema https://example.com
 ```
 
 **What it does:**
@@ -135,13 +139,13 @@ Schema markup detection, validation, and generation.
 
 ---
 
-### `/seo geo <url>`
+### `/solnest-seo:seo geo <url>`
 
 AI Overviews / Generative Engine Optimization.
 
 **Example:**
 ```
-/seo geo https://example.com/blog/guide
+/solnest-seo:seo geo https://example.com/blog/guide
 ```
 
 **What it analyzes:**
@@ -153,15 +157,15 @@ AI Overviews / Generative Engine Optimization.
 
 ---
 
-### `/seo images <url>`
+### `/solnest-seo:seo images <url>`
 
 Image optimization analysis. Subcommands: `serp <keyword>` (image SERP / visual-search analysis), `optimize <path>` (local file optimization + IPTC AI labeling).
 
 **Examples:**
 ```
-/seo images https://example.com
-/seo images serp "running shoes"
-/seo images optimize ./hero.webp
+/solnest-seo:seo images https://example.com
+/solnest-seo:seo images serp "running shoes"
+/solnest-seo:seo images optimize ./hero.webp
 ```
 
 **What it checks:**
@@ -174,13 +178,13 @@ Image optimization analysis. Subcommands: `serp <keyword>` (image SERP / visual-
 
 ---
 
-### `/seo sitemap <url>`
+### `/solnest-seo:seo sitemap <url>`
 
 Analyze existing XML sitemap.
 
 **Example:**
 ```
-/seo sitemap https://example.com/sitemap.xml
+/solnest-seo:seo sitemap https://example.com/sitemap.xml
 ```
 
 **What it validates:**
@@ -193,13 +197,13 @@ Analyze existing XML sitemap.
 
 ---
 
-### `/seo sitemap generate`
+### `/solnest-seo:seo sitemap generate`
 
 Generate new sitemap with industry templates.
 
 **Example:**
 ```
-/seo sitemap generate
+/solnest-seo:seo sitemap generate
 ```
 
 **Process:**
@@ -211,7 +215,7 @@ Generate new sitemap with industry templates.
 
 ---
 
-### `/seo plan <type>`
+### `/solnest-seo:seo plan <type>`
 
 Strategic SEO planning.
 
@@ -219,7 +223,7 @@ Strategic SEO planning.
 
 **Example:**
 ```
-/seo plan saas
+/solnest-seo:seo plan saas
 ```
 
 **What it creates:**
@@ -231,14 +235,14 @@ Strategic SEO planning.
 
 ---
 
-### `/seo competitor-pages [url|generate]`
+### `/solnest-seo:seo competitor-pages [url|generate]`
 
 Competitor comparison page generation.
 
 **Examples:**
 ```
-/seo competitor-pages https://example.com/vs/competitor
-/seo competitor-pages generate
+/solnest-seo:seo competitor-pages https://example.com/vs/competitor
+/solnest-seo:seo competitor-pages generate
 ```
 
 **Capabilities:**
@@ -251,14 +255,14 @@ Competitor comparison page generation.
 
 ---
 
-### `/seo hreflang [url]`
+### `/solnest-seo:seo hreflang [url]`
 
 Hreflang and international SEO audit and generation. Subcommand: `audit <directory-or-url>` (audit hreflang across a local build directory or a live URL set).
 
 **Examples:**
 ```
-/seo hreflang https://example.com
-/seo hreflang audit ./dist
+/solnest-seo:seo hreflang https://example.com
+/solnest-seo:seo hreflang audit ./dist
 ```
 
 **Capabilities:**
@@ -272,14 +276,14 @@ Hreflang and international SEO audit and generation. Subcommand: `audit <directo
 
 ---
 
-### `/seo programmatic [url|plan]`
+### `/solnest-seo:seo programmatic [url|plan]`
 
 Programmatic SEO analysis and planning for pages generated at scale.
 
 **Examples:**
 ```
-/seo programmatic https://example.com/tools/
-/seo programmatic plan
+/solnest-seo:seo programmatic https://example.com/tools/
+/solnest-seo:seo programmatic plan
 ```
 
 **Capabilities:**
@@ -292,13 +296,13 @@ Programmatic SEO analysis and planning for pages generated at scale.
 
 ---
 
-### `/seo local <url>`
+### `/solnest-seo:seo local <url>`
 
 Local SEO analysis covering Google Business Profile, citations, reviews, and the map pack.
 
 **Example:**
 ```
-/seo local https://example.com
+/solnest-seo:seo local https://example.com
 ```
 
 **What it analyzes:**
@@ -311,19 +315,19 @@ Local SEO analysis covering Google Business Profile, citations, reviews, and the
 
 ---
 
-### `/seo maps [command] [args]`
+### `/solnest-seo:seo maps [command] [args]`
 
 Maps intelligence: geo-grid rank tracking, GBP profile audits, review intelligence, cross-platform NAP verification, competitor radius mapping.
 
 **Examples:**
 ```
-/seo maps "Joe's Coffee" "austin tx"
-/seo maps grid "coffee shop" "austin tx"
-/seo maps gbp "Joe's Coffee" "austin tx"
-/seo maps reviews "Joe's Coffee" "austin tx"
-/seo maps competitors "auto repair" "denver"
-/seo maps nap "Joe's Coffee" "austin tx"
-/seo maps schema "Joe's Coffee" "austin tx"
+/solnest-seo:seo maps "Joe's Coffee" "austin tx"
+/solnest-seo:seo maps grid "coffee shop" "austin tx"
+/solnest-seo:seo maps gbp "Joe's Coffee" "austin tx"
+/solnest-seo:seo maps reviews "Joe's Coffee" "austin tx"
+/solnest-seo:seo maps competitors "auto repair" "denver"
+/solnest-seo:seo maps nap "Joe's Coffee" "austin tx"
+/solnest-seo:seo maps schema "Joe's Coffee" "austin tx"
 ```
 
 **Capabilities:**
@@ -334,18 +338,18 @@ Maps intelligence: geo-grid rank tracking, GBP profile audits, review intelligen
 
 ---
 
-### `/seo backlinks <url>`
+### `/solnest-seo:seo backlinks <url>`
 
 Backlink profile analysis with a 3-tier data cascade: free (Common Crawl + verification), free with signup (Moz, Bing Webmaster Tools), paid (DataForSEO).
 
 **Examples:**
 ```
-/seo backlinks https://example.com
-/seo backlinks gap https://example.com https://competitor.com
-/seo backlinks toxic https://example.com
-/seo backlinks new https://example.com
-/seo backlinks verify https://example.com --links known-links.txt
-/seo backlinks setup
+/solnest-seo:seo backlinks https://example.com
+/solnest-seo:seo backlinks gap https://example.com https://competitor.com
+/solnest-seo:seo backlinks toxic https://example.com
+/solnest-seo:seo backlinks new https://example.com
+/solnest-seo:seo backlinks verify https://example.com --links known-links.txt
+/solnest-seo:seo backlinks setup
 ```
 
 **What it analyzes:**
@@ -358,16 +362,16 @@ Backlink profile analysis with a 3-tier data cascade: free (Common Crawl + verif
 
 ---
 
-### `/seo cluster [command] <seed-keyword>`
+### `/solnest-seo:seo cluster [command] <seed-keyword>`
 
-SERP-based semantic topic clustering for content architecture planning. Built on the Pro Hub Challenge Semantic Cluster Engine. Subcommands: `plan <seed>` (full planning workflow; also `plan --from strategy` to import a `/seo plan` output), `execute` (create content via claude-blog or output briefs), `map` (regenerate the interactive visualization). Bare `/seo cluster <seed>` is shorthand for `plan`.
+SERP-based semantic topic clustering for content architecture planning. Built on the Pro Hub Challenge Semantic Cluster Engine. Subcommands: `plan <seed>` (full planning workflow; also `plan --from strategy` to import a `/solnest-seo:seo plan` output), `execute` (create content via claude-blog or output briefs), `map` (regenerate the interactive visualization). Bare `/solnest-seo:seo cluster <seed>` is shorthand for `plan`.
 
 **Examples:**
 ```
-/seo cluster plan "claude code skills"
-/seo cluster plan --from strategy
-/seo cluster execute
-/seo cluster map
+/solnest-seo:seo cluster plan "claude code skills"
+/solnest-seo:seo cluster plan --from strategy
+/solnest-seo:seo cluster execute
+/solnest-seo:seo cluster map
 ```
 
 **What it produces:**
@@ -380,16 +384,16 @@ SERP-based semantic topic clustering for content architecture planning. Built on
 
 ---
 
-### `/seo sxo <url>`
+### `/solnest-seo:seo sxo <url>`
 
 Search Experience Optimization: SERP backwards analysis, page-type mismatch detection, persona scoring. Subcommands: `<url> <keyword>` (analyze for a specific keyword), `wireframe <url>` (IST/SOLL wireframe), `personas <url>` (persona-only scoring, skips SERP).
 
 **Examples:**
 ```
-/seo sxo https://example.com/blog/how-to-x
-/seo sxo https://example.com/page "target keyword"
-/seo sxo wireframe https://example.com/page
-/seo sxo personas https://example.com/page
+/solnest-seo:seo sxo https://example.com/blog/how-to-x
+/solnest-seo:seo sxo https://example.com/page "target keyword"
+/solnest-seo:seo sxo wireframe https://example.com/page
+/solnest-seo:seo sxo personas https://example.com/page
 ```
 
 **What it produces:**
@@ -401,15 +405,15 @@ Search Experience Optimization: SERP backwards analysis, page-type mismatch dete
 
 ---
 
-### `/seo drift baseline|compare|history <url>`
+### `/solnest-seo:seo drift baseline|compare|history <url>`
 
 SEO drift monitoring. Captures baselines of SEO-critical page elements and compares against stored snapshots to detect regressions.
 
 **Examples:**
 ```
-/seo drift baseline https://example.com
-/seo drift compare https://example.com
-/seo drift history https://example.com
+/solnest-seo:seo drift baseline https://example.com
+/solnest-seo:seo drift compare https://example.com
+/solnest-seo:seo drift history https://example.com
 ```
 
 **What it tracks:** title, meta description, canonical, hreflang, Open Graph, schema, headings, internal links, robots, sitemap entry, indexability, Core Web Vitals, response status, redirect chain.
@@ -418,16 +422,16 @@ SEO drift monitoring. Captures baselines of SEO-critical page elements and compa
 
 ---
 
-### `/seo ecommerce <url>`
+### `/solnest-seo:seo ecommerce <url>`
 
 E-commerce SEO covering product schema, marketplace intelligence, and pricing gap analysis. Subcommands: `products <keyword>` (Google Shopping competitive analysis), `gaps <domain>` (organic-vs-Shopping visibility gap), `schema <url>` (product schema validation + enhancement).
 
 **Examples:**
 ```
-/seo ecommerce https://shop.example.com/product/x
-/seo ecommerce products "running shoes"
-/seo ecommerce gaps shop.example.com
-/seo ecommerce schema https://shop.example.com/product/x
+/solnest-seo:seo ecommerce https://shop.example.com/product/x
+/solnest-seo:seo ecommerce products "running shoes"
+/solnest-seo:seo ecommerce gaps shop.example.com
+/solnest-seo:seo ecommerce schema https://shop.example.com/product/x
 ```
 
 **What it analyzes:**
@@ -440,73 +444,73 @@ E-commerce SEO covering product schema, marketplace intelligence, and pricing ga
 
 ---
 
-### `/seo flow [stage] [url|topic]`
+### `/solnest-seo:seo flow [stage] [url|topic]`
 
 FLOW framework integration: evidence-led prompts for the Find, Leverage, Optimize, Win, and Local stages of a content campaign.
 
 **Examples:**
 ```
-/seo flow find "topic"
-/seo flow leverage https://example.com
-/seo flow optimize https://example.com/page
-/seo flow win https://example.com/page
-/seo flow local https://example.com
-/seo flow prompts
-/seo flow sync
+/solnest-seo:seo flow find "topic"
+/solnest-seo:seo flow leverage https://example.com
+/solnest-seo:seo flow optimize https://example.com/page
+/solnest-seo:seo flow win https://example.com/page
+/solnest-seo:seo flow local https://example.com
+/solnest-seo:seo flow prompts
+/solnest-seo:seo flow sync
 ```
 
 **41 prompts** sourced from FLOW (CC BY 4.0). Each prompt is grounded in a specific evidence source (SERP data, GSC, GA4, customer interviews) with attribution preserved.
 
 ---
 
-### `/seo google [command] [url]`
+### `/solnest-seo:seo google [command] [url]`
 
 Google SEO APIs. 4-tier credential system covering PageSpeed Insights, CrUX, CrUX History, Search Console, URL Inspection, Indexing API, GA4, and Keyword Planner.
 
 **Setup & reporting:**
 ```
-/seo google setup                      # Configure/check credentials
-/seo google quotas                     # Show per-API quota usage
-/seo google report full                # Generate full PDF/HTML report
-/seo google report cwv-audit           # CWV-focused report
-/seo google report gsc-performance     # Search performance report
-/seo google report indexation          # Indexation status report
+/solnest-seo:seo google setup                      # Configure/check credentials
+/solnest-seo:seo google quotas                     # Show per-API quota usage
+/solnest-seo:seo google report full                # Generate full PDF/HTML report
+/solnest-seo:seo google report cwv-audit           # CWV-focused report
+/solnest-seo:seo google report gsc-performance     # Search performance report
+/solnest-seo:seo google report indexation          # Indexation status report
 ```
 
 **PageSpeed / CrUX (Tier 0):**
 ```
-/seo google pagespeed <url>            # PageSpeed Insights (lab) + CWV
-/seo google crux <url>                 # CrUX field data
-/seo google crux-history <url>         # 25-week CrUX history
+/solnest-seo:seo google pagespeed <url>            # PageSpeed Insights (lab) + CWV
+/solnest-seo:seo google crux <url>                 # CrUX field data
+/solnest-seo:seo google crux-history <url>         # 25-week CrUX history
 ```
 
 **Search Console / Indexing (Tier 1):**
 ```
-/seo google gsc <property>             # Search Analytics (clicks/impressions/CTR/position)
-/seo google inspect <url>              # URL Inspection (indexation status)
-/seo google inspect-batch <file>       # Batch URL inspection
-/seo google sitemaps <property>        # List submitted sitemaps + status
-/seo google index <url>                # Indexing API notify
-/seo google index-batch <file>         # Batch indexing notify
+/solnest-seo:seo google gsc <property>             # Search Analytics (clicks/impressions/CTR/position)
+/solnest-seo:seo google inspect <url>              # URL Inspection (indexation status)
+/solnest-seo:seo google inspect-batch <file>       # Batch URL inspection
+/solnest-seo:seo google sitemaps <property>        # List submitted sitemaps + status
+/solnest-seo:seo google index <url>                # Indexing API notify
+/solnest-seo:seo google index-batch <file>         # Batch indexing notify
 ```
 Use Indexing API commands only for pages with JobPosting or BroadcastEvent embedded in VideoObject. Route ordinary URLs to URL Inspection or sitemaps; `URL_UPDATED` does not guarantee indexing.
 
 **GA4 (Tier 2):**
 ```
-/seo google ga4 [property-id]          # Organic traffic report
-/seo google ga4-pages [property-id]    # Top organic landing pages
+/solnest-seo:seo google ga4 [property-id]          # Organic traffic report
+/solnest-seo:seo google ga4-pages [property-id]    # Top organic landing pages
 ```
 
 **NLP / Keywords / YouTube:**
 ```
-/seo google nlp <url-or-text>          # NLP content analysis
-/seo google entities <url-or-text>     # Entity extraction
-/seo google entity <query>             # Entity lookup
-/seo google keywords <seed>            # Keyword Planner ideas (Tier 3)
-/seo google volume <keywords>          # Keyword search volume (Tier 3)
-/seo google youtube <query>            # YouTube search
-/seo google youtube-video <video_id>   # YouTube video analysis
-/seo google safety <url>               # Safe Browsing check
+/solnest-seo:seo google nlp <url-or-text>          # NLP content analysis
+/solnest-seo:seo google entities <url-or-text>     # Entity extraction
+/solnest-seo:seo google entity <query>             # Entity lookup
+/solnest-seo:seo google keywords <seed>            # Keyword Planner ideas (Tier 3)
+/solnest-seo:seo google volume <keywords>          # Keyword search volume (Tier 3)
+/solnest-seo:seo google youtube <query>            # YouTube search
+/solnest-seo:seo google youtube-video <video_id>   # YouTube video analysis
+/solnest-seo:seo google safety <url>               # Safe Browsing check
 ```
 
 **Tiers:**
@@ -519,7 +523,7 @@ PDF and HTML reports generated via WeasyPrint and matplotlib.
 
 ---
 
-### `/seo image-gen [use-case] <description>`
+### `/solnest-seo:seo image-gen [use-case] <description>`
 
 AI image generation for SEO assets (extension). Powered by Gemini via nanobanana-mcp.
 
@@ -527,12 +531,12 @@ AI image generation for SEO assets (extension). Powered by Gemini via nanobanana
 
 **Use Cases:**
 ```
-/seo image-gen og <description>          # OG/social preview image (16:9, 1K)
-/seo image-gen hero <description>        # Blog hero image (16:9, 2K)
-/seo image-gen product <description>     # Product photography (4:3, 2K)
-/seo image-gen infographic <description> # Infographic visual (2:3, 4K)
-/seo image-gen custom <description>      # Custom with full Creative Director pipeline
-/seo image-gen batch <description> [N]   # Generate N variations (default: 3)
+/solnest-seo:seo image-gen og <description>          # OG/social preview image (16:9, 1K)
+/solnest-seo:seo image-gen hero <description>        # Blog hero image (16:9, 2K)
+/solnest-seo:seo image-gen product <description>     # Product photography (4:3, 2K)
+/solnest-seo:seo image-gen infographic <description> # Infographic visual (2:3, 4K)
+/solnest-seo:seo image-gen custom <description>      # Custom with full Creative Director pipeline
+/solnest-seo:seo image-gen batch <description> [N]   # Generate N variations (default: 3)
 ```
 
 **What it does:**
@@ -543,7 +547,7 @@ AI image generation for SEO assets (extension). Powered by Gemini via nanobanana
 
 ---
 
-### `/seo firecrawl [command] <url>`
+### `/solnest-seo:seo firecrawl [command] <url>`
 
 Full-site crawling and URL discovery via Firecrawl MCP (extension).
 
@@ -551,10 +555,10 @@ Full-site crawling and URL discovery via Firecrawl MCP (extension).
 
 **Examples:**
 ```
-/seo firecrawl crawl https://example.com
-/seo firecrawl map https://example.com
-/seo firecrawl scrape https://example.com/page
-/seo firecrawl search "query" https://example.com
+/solnest-seo:seo firecrawl crawl https://example.com
+/solnest-seo:seo firecrawl map https://example.com
+/solnest-seo:seo firecrawl scrape https://example.com/page
+/solnest-seo:seo firecrawl search "query" https://example.com
 ```
 
 **What it does:**
@@ -565,7 +569,7 @@ Full-site crawling and URL discovery via Firecrawl MCP (extension).
 
 ---
 
-### `/seo dataforseo [command]`
+### `/solnest-seo:seo dataforseo [command]`
 
 Live SEO data via DataForSEO MCP server (extension). 23 data commands across 9 API modules, plus cost-tracking commands.
 
@@ -573,116 +577,116 @@ Live SEO data via DataForSEO MCP server (extension). 23 data commands across 9 A
 
 **SERP Analysis:**
 ```
-/seo dataforseo serp <keyword>              # Google organic results (also Bing/Yahoo)
-/seo dataforseo serp-images <keyword>       # Google Images SERP results
-/seo dataforseo serp-youtube <keyword>      # YouTube search results
-/seo dataforseo youtube <video_id>          # YouTube video deep analysis
+/solnest-seo:seo dataforseo serp <keyword>              # Google organic results (also Bing/Yahoo)
+/solnest-seo:seo dataforseo serp-images <keyword>       # Google Images SERP results
+/solnest-seo:seo dataforseo serp-youtube <keyword>      # YouTube search results
+/solnest-seo:seo dataforseo youtube <video_id>          # YouTube video deep analysis
 ```
 
 **Keyword Research:**
 ```
-/seo dataforseo keywords <seed>             # Keyword ideas and suggestions
-/seo dataforseo volume <keywords>           # Search volume metrics
-/seo dataforseo difficulty <keywords>       # Keyword difficulty scores
-/seo dataforseo intent <keywords>           # Search intent classification
-/seo dataforseo trends <keyword>            # Google Trends data
+/solnest-seo:seo dataforseo keywords <seed>             # Keyword ideas and suggestions
+/solnest-seo:seo dataforseo volume <keywords>           # Search volume metrics
+/solnest-seo:seo dataforseo difficulty <keywords>       # Keyword difficulty scores
+/solnest-seo:seo dataforseo intent <keywords>           # Search intent classification
+/solnest-seo:seo dataforseo trends <keyword>            # Google Trends data
 ```
 
 **Domain & Competitors:**
 ```
-/seo dataforseo backlinks <domain>          # Full backlink profile
-/seo dataforseo competitors <domain>        # Competitor analysis
-/seo dataforseo ranked <domain>             # Ranked keywords
-/seo dataforseo intersection <domains>      # Keyword/backlink overlap
-/seo dataforseo traffic <domains>           # Traffic estimation
-/seo dataforseo subdomains <domain>         # Subdomains with ranking data
-/seo dataforseo top-searches <domain>       # Top queries mentioning domain
+/solnest-seo:seo dataforseo backlinks <domain>          # Full backlink profile
+/solnest-seo:seo dataforseo competitors <domain>        # Competitor analysis
+/solnest-seo:seo dataforseo ranked <domain>             # Ranked keywords
+/solnest-seo:seo dataforseo intersection <domains>      # Keyword/backlink overlap
+/solnest-seo:seo dataforseo traffic <domains>           # Traffic estimation
+/solnest-seo:seo dataforseo subdomains <domain>         # Subdomains with ranking data
+/solnest-seo:seo dataforseo top-searches <domain>       # Top queries mentioning domain
 ```
 
 **Technical / On-Page:**
 ```
-/seo dataforseo onpage <url>                # On-page analysis (Lighthouse)
-/seo dataforseo tech <domain>               # Technology detection
-/seo dataforseo whois <domain>              # WHOIS data
+/solnest-seo:seo dataforseo onpage <url>                # On-page analysis (Lighthouse)
+/solnest-seo:seo dataforseo tech <domain>               # Technology detection
+/solnest-seo:seo dataforseo whois <domain>              # WHOIS data
 ```
 
 **Content & Business Data:**
 ```
-/seo dataforseo content <keyword/url>       # Content analysis and trends
-/seo dataforseo listings <keyword>          # Business listings search
+/solnest-seo:seo dataforseo content <keyword/url>       # Content analysis and trends
+/solnest-seo:seo dataforseo listings <keyword>          # Business listings search
 ```
 
 **AI Visibility / GEO:**
 ```
-/seo dataforseo ai-scrape <query>           # ChatGPT web scraper for GEO
-/seo dataforseo ai-mentions <keyword>       # LLM mention tracking
+/solnest-seo:seo dataforseo ai-scrape <query>           # ChatGPT web scraper for GEO
+/solnest-seo:seo dataforseo ai-mentions <keyword>       # LLM mention tracking
 ```
 
 **Cost Tracking:**
 ```
-/seo dataforseo costs today                            # Today's DataForSEO spend
-/seo dataforseo costs summary                          # Spend summary across periods
-/seo dataforseo costs config --mode threshold --threshold 0.50   # Set cost-control mode/threshold
+/solnest-seo:seo dataforseo costs today                            # Today's DataForSEO spend
+/solnest-seo:seo dataforseo costs summary                          # Spend summary across periods
+/solnest-seo:seo dataforseo costs config --mode threshold --threshold 0.50   # Set cost-control mode/threshold
 ```
 
 ---
 
-### `/seo ahrefs [command] <url|topic>`
+### `/solnest-seo:seo ahrefs [command] <url|topic>`
 
 Ahrefs API metrics (extension). **Prerequisites:** Ahrefs extension installed (`./extensions/ahrefs/install.sh`).
 ```
-/seo ahrefs metrics <url>       # DR/UR, referring-domain count, organic traffic estimate
-/seo ahrefs backlinks <url>     # Top referring domains, anchor distribution, follow/nofollow ratio
-/seo ahrefs organic <url>       # Organic keywords, ranking distribution, traffic by country
-/seo ahrefs content <topic>     # Content Explorer top results, social shares, referring domains
+/solnest-seo:seo ahrefs metrics <url>       # DR/UR, referring-domain count, organic traffic estimate
+/solnest-seo:seo ahrefs backlinks <url>     # Top referring domains, anchor distribution, follow/nofollow ratio
+/solnest-seo:seo ahrefs organic <url>       # Organic keywords, ranking distribution, traffic by country
+/solnest-seo:seo ahrefs content <topic>     # Content Explorer top results, social shares, referring domains
 ```
 
 ---
 
-### `/seo bing [command]`
+### `/solnest-seo:seo bing [command]`
 
 Bing Webmaster Tools + IndexNow (extension). **Prerequisites:** Bing extension installed (`./extensions/bing-webmaster/install.sh`).
 ```
-/seo bing links <url>                 # Inbound links from Bing Webmaster
-/seo bing compare <urlA> <urlB>       # Compare two URLs' Bing link profiles
-/seo bing submit <url> --host <host>                # IndexNow single-URL submit (requires key)
-/seo bing submit-batch <file> --host <host>         # IndexNow batch submit (requires key)
-/seo bing verify-indexnow --host <host>             # Verify the IndexNow key is published
+/solnest-seo:seo bing links <url>                 # Inbound links from Bing Webmaster
+/solnest-seo:seo bing compare <urlA> <urlB>       # Compare two URLs' Bing link profiles
+/solnest-seo:seo bing submit <url> --host <host>                # IndexNow single-URL submit (requires key)
+/solnest-seo:seo bing submit-batch <file> --host <host>         # IndexNow batch submit (requires key)
+/solnest-seo:seo bing verify-indexnow --host <host>             # Verify the IndexNow key is published
 ```
 
 ---
 
-### `/seo profound [command] <brand>`
+### `/solnest-seo:seo profound [command] <brand>`
 
 LLM brand-citation tracking via Profound (extension). **Prerequisites:** Profound extension installed.
 ```
-/seo profound citations <brand>     # Citation rate per LLM + 30-day trend
-/seo profound prompts <brand>       # Top prompts that surface (or miss) the brand
-/seo profound competitors <brand>   # Brands cited alongside yours for the same prompts
-/seo profound alerts <brand>        # Spike/drop alerts vs 7-day baseline
+/solnest-seo:seo profound citations <brand>     # Citation rate per LLM + 30-day trend
+/solnest-seo:seo profound prompts <brand>       # Top prompts that surface (or miss) the brand
+/solnest-seo:seo profound competitors <brand>   # Brands cited alongside yours for the same prompts
+/solnest-seo:seo profound alerts <brand>        # Spike/drop alerts vs 7-day baseline
 ```
 
 ---
 
-### `/seo seranking [command] <brand|keyword|url>`
+### `/solnest-seo:seo seranking [command] <brand|keyword|url>`
 
 AI-visibility + SERP via SE Ranking (extension). **Prerequisites:** SE Ranking extension installed.
 ```
-/seo seranking ai-visibility <brand>   # Share-of-voice across ChatGPT/Gemini/Perplexity/AI Overviews/AI Mode
-/seo seranking serp <keyword>          # Top 100 organic positions + SERP features
-/seo seranking backlinks <url>         # Backlink profile (free-tier alternative to Ahrefs/DataForSEO)
-/seo seranking competitors <url>       # Top 10 organic competitors + shared-keyword gaps
+/solnest-seo:seo seranking ai-visibility <brand>   # Share-of-voice across ChatGPT/Gemini/Perplexity/AI Overviews/AI Mode
+/solnest-seo:seo seranking serp <keyword>          # Top 100 organic positions + SERP features
+/solnest-seo:seo seranking backlinks <url>         # Backlink profile (free-tier alternative to Ahrefs/DataForSEO)
+/solnest-seo:seo seranking competitors <url>       # Top 10 organic competitors + shared-keyword gaps
 ```
 
 ---
 
-### `/seo unlighthouse <url>`
+### `/solnest-seo:seo unlighthouse <url>`
 
 Multi-page Lighthouse audit via Unlighthouse (extension, MIT, no API quota). **Prerequisites:** Node 18+ and the unlighthouse npm package (`./extensions/unlighthouse/install.sh`).
 ```
-/seo unlighthouse https://example.com
-/seo unlighthouse https://example.com --device desktop
-/seo unlighthouse https://example.com --max-routes 50 --output-dir ./reports
+/solnest-seo:seo unlighthouse https://example.com
+/solnest-seo:seo unlighthouse https://example.com --device desktop
+/solnest-seo:seo unlighthouse https://example.com --max-routes 50 --output-dir ./reports
 ```
 
 ---
@@ -691,34 +695,34 @@ Multi-page Lighthouse audit via Unlighthouse (extension, MIT, no API quota). **P
 
 | Command | Use Case |
 |---------|----------|
-| `/seo audit <url>` | Full website audit with parallel subagents |
-| `/seo page <url>` | Single page analysis |
-| `/seo technical <url>` | Technical SEO across 9 categories |
-| `/seo content <url>` | E-E-A-T and content quality |
-| `/seo content-brief <topic>` | Detailed content brief: keywords, outline, internal links |
-| `/seo schema <url>` | Schema markup detection, validation, generation |
-| `/seo sitemap <url>` | Sitemap validation |
-| `/seo sitemap generate` | Create new sitemap with industry templates |
-| `/seo images <url>` | Image optimization |
-| `/seo geo <url>` | AI search optimization (GEO) |
-| `/seo local <url>` | Local SEO (GBP, citations, reviews) |
-| `/seo maps [command]` | Maps intelligence (geo-grid, GBP audit, competitors) |
-| `/seo backlinks <url>` | Backlink profile analysis |
-| `/seo cluster <seed>` | SERP-based semantic clustering |
-| `/seo sxo <url>` | Search Experience Optimization |
-| `/seo drift baseline\|compare\|history <url>` | SEO drift monitoring |
-| `/seo ecommerce <url>` | E-commerce SEO |
-| `/seo hreflang [url]` | Hreflang and international SEO |
-| `/seo plan <type>` | Strategic planning by industry |
-| `/seo programmatic [url\|plan]` | Programmatic SEO analysis |
-| `/seo competitor-pages [url\|generate]` | Competitor comparison pages |
-| `/seo flow [stage] [url\|topic]` | FLOW framework prompts |
-| `/seo google [command] [url]` | Google SEO APIs (GSC, PSI, CrUX, GA4) |
-| `/seo dataforseo [command]` | Live SEO data (extension) |
-| `/seo image-gen [use-case] <desc>` | AI image generation (extension) |
-| `/seo firecrawl [command] <url>` | Full-site crawling (extension) |
-| `/seo ahrefs [command] <url>` | Backlinks, organic keywords, and content data via the official Ahrefs MCP (extension) |
-| `/seo seranking [command]` | AI Share-of-Voice across ChatGPT, Gemini, Perplexity, AI Overviews, AI Mode (extension) |
-| `/seo profound [command]` | LLM citation tracking with time-series data (extension) |
-| `/seo bing [command] <url>` | Bing Webmaster Tools + IndexNow URL submission (extension) |
-| `/seo unlighthouse <url>` | Multi-page Lighthouse runner, runs locally (extension) |
+| `/solnest-seo:seo audit <url>` | Full website audit with parallel subagents |
+| `/solnest-seo:seo page <url>` | Single page analysis |
+| `/solnest-seo:seo technical <url>` | Technical SEO across 9 categories |
+| `/solnest-seo:seo content <url>` | E-E-A-T and content quality |
+| `/solnest-seo:seo content-brief <topic>` | Detailed content brief: keywords, outline, internal links |
+| `/solnest-seo:seo schema <url>` | Schema markup detection, validation, generation |
+| `/solnest-seo:seo sitemap <url>` | Sitemap validation |
+| `/solnest-seo:seo sitemap generate` | Create new sitemap with industry templates |
+| `/solnest-seo:seo images <url>` | Image optimization |
+| `/solnest-seo:seo geo <url>` | AI search optimization (GEO) |
+| `/solnest-seo:seo local <url>` | Local SEO (GBP, citations, reviews) |
+| `/solnest-seo:seo maps [command]` | Maps intelligence (geo-grid, GBP audit, competitors) |
+| `/solnest-seo:seo backlinks <url>` | Backlink profile analysis |
+| `/solnest-seo:seo cluster <seed>` | SERP-based semantic clustering |
+| `/solnest-seo:seo sxo <url>` | Search Experience Optimization |
+| `/solnest-seo:seo drift baseline\|compare\|history <url>` | SEO drift monitoring |
+| `/solnest-seo:seo ecommerce <url>` | E-commerce SEO |
+| `/solnest-seo:seo hreflang [url]` | Hreflang and international SEO |
+| `/solnest-seo:seo plan <type>` | Strategic planning by industry |
+| `/solnest-seo:seo programmatic [url\|plan]` | Programmatic SEO analysis |
+| `/solnest-seo:seo competitor-pages [url\|generate]` | Competitor comparison pages |
+| `/solnest-seo:seo flow [stage] [url\|topic]` | FLOW framework prompts |
+| `/solnest-seo:seo google [command] [url]` | Google SEO APIs (GSC, PSI, CrUX, GA4) |
+| `/solnest-seo:seo dataforseo [command]` | Live SEO data (extension) |
+| `/solnest-seo:seo image-gen [use-case] <desc>` | AI image generation (extension) |
+| `/solnest-seo:seo firecrawl [command] <url>` | Full-site crawling (extension) |
+| `/solnest-seo:seo ahrefs [command] <url>` | Backlinks, organic keywords, and content data via the official Ahrefs MCP (extension) |
+| `/solnest-seo:seo seranking [command]` | AI Share-of-Voice across ChatGPT, Gemini, Perplexity, AI Overviews, AI Mode (extension) |
+| `/solnest-seo:seo profound [command]` | LLM citation tracking with time-series data (extension) |
+| `/solnest-seo:seo bing [command] <url>` | Bing Webmaster Tools + IndexNow URL submission (extension) |
+| `/solnest-seo:seo unlighthouse <url>` | Multi-page Lighthouse runner, runs locally (extension) |

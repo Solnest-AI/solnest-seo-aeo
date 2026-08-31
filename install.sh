@@ -1,22 +1,29 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Claude SEO Installer
+# Solnest SEO/AEO Installer (manual / advanced path)
+#
+# The supported install is the declarative one in INSTALL.md, which registers
+# this repo as a Claude Code plugin. This script is the manual fallback: it
+# copies the skills straight into ~/.claude/skills/ instead. Do not run both.
+#
 # Wraps everything in main() to prevent partial execution on network failure
 
 main() {
     SKILL_DIR="${HOME}/.claude/skills/seo"
     AGENT_DIR="${HOME}/.claude/agents"
-    REPO_URL="https://github.com/AgriciDaniel/claude-seo"
+    REPO_URL="https://github.com/Solnest-AI/solnest-seo-aeo"
     # Pin to a specific release tag to prevent silent updates from main.
     # This default MUST be bumped on every release. CI guard
     # (tests/test_manifest_consistency.py) enforces this matches plugin.json.
+    # If the tag is not published yet the clone falls back to the default
+    # branch, so the installer never silently installs nothing.
     # Override: CLAUDE_SEO_TAG=main bash install.sh
     REPO_TAG="${CLAUDE_SEO_TAG:-v2.2.4}"
 
     echo "════════════════════════════════════════"
-    echo "║   Claude SEO - Installer             ║"
-    echo "║   Claude Code SEO Skill              ║"
+    echo "║   Solnest SEO/AEO - Installer        ║"
+    echo "║   Claude Code SEO + AEO Skills       ║"
     echo "════════════════════════════════════════"
     echo ""
 
@@ -33,8 +40,11 @@ main() {
     cleanup() { rm -rf -- "${TEMP_DIR}"; }
     trap cleanup EXIT
 
-    echo "↓ Downloading Claude SEO (${REPO_TAG})..."
-    git clone --depth 1 --branch "${REPO_TAG}" "${REPO_URL}" "${TEMP_DIR}/claude-seo" 2>/dev/null
+    echo "↓ Downloading Solnest SEO/AEO (${REPO_TAG})..."
+    if ! git clone --depth 1 --branch "${REPO_TAG}" "${REPO_URL}" "${TEMP_DIR}/claude-seo" 2>/dev/null; then
+        echo "  Tag ${REPO_TAG} is not published on ${REPO_URL}; using the default branch."
+        git clone --depth 1 "${REPO_URL}" "${TEMP_DIR}/claude-seo"
+    fi
 
     # Copy skill files
     echo "→ Installing skill files..."

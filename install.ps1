@@ -1,11 +1,15 @@
-# Claude SEO Installer for Windows
+# Solnest SEO/AEO Installer for Windows (manual / advanced path)
 # PowerShell installation script
+#
+# The supported install is the declarative one in INSTALL.md, which registers
+# this repo as a Claude Code plugin. This script is the manual fallback: it
+# copies the skills straight into ~\.claude\skills\ instead. Do not run both.
 
 $ErrorActionPreference = "Stop"
 
 Write-Host "========================================" -ForegroundColor Cyan
-Write-Host "|   Claude SEO - Installer             |" -ForegroundColor Cyan
-Write-Host "|   Claude Code SEO Skill              |" -ForegroundColor Cyan
+Write-Host "|   Solnest SEO/AEO - Installer        |" -ForegroundColor Cyan
+Write-Host "|   Claude Code SEO + AEO Skills       |" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
@@ -113,10 +117,12 @@ try {
 # Set paths
 $SkillDir = "$env:USERPROFILE\.claude\skills\seo"
 $AgentDir = "$env:USERPROFILE\.claude\agents"
-$RepoUrl = "https://github.com/AgriciDaniel/claude-seo"
+$RepoUrl = "https://github.com/Solnest-AI/solnest-seo-aeo"
 # Pin to a specific release tag to prevent silent updates from main.
 # This default MUST be bumped on every release. CI guard
 # (tests/test_manifest_consistency.py) enforces this matches plugin.json.
+# If the tag is not published yet the clone falls back to the default branch,
+# so the installer never silently installs nothing.
 # Override: $env:CLAUDE_SEO_TAG = 'main'; .\install.ps1
 $RepoTag = if ($env:CLAUDE_SEO_TAG) { $env:CLAUDE_SEO_TAG } else { 'v2.2.4' }
 
@@ -133,8 +139,12 @@ if (Test-Path $TempDir) {
 $keepTemp = ($env:CLAUDE_SEO_KEEP_TEMP -eq '1')
 
 try {
-    Write-Host ">> Downloading Claude SEO ($RepoTag)..." -ForegroundColor Yellow
+    Write-Host ">> Downloading Solnest SEO/AEO ($RepoTag)..." -ForegroundColor Yellow
     $clone = Invoke-External -Exe 'git' -Args @('clone','--depth','1','--branch',$RepoTag,$RepoUrl,$TempDir) -Quiet
+    if ($clone.ExitCode -ne 0) {
+        Write-Host "   Tag $RepoTag is not published on $RepoUrl; using the default branch." -ForegroundColor Yellow
+        $clone = Invoke-External -Exe 'git' -Args @('clone','--depth','1',$RepoUrl,$TempDir) -Quiet
+    }
     if ($clone.ExitCode -ne 0) {
         throw "git clone failed. Output:`n$($clone.Output -join "`n")"
     }
@@ -332,7 +342,7 @@ try {
 }
 
 Write-Host ""
-Write-Host "[+] Claude SEO installed successfully!" -ForegroundColor Green
+Write-Host "[+] Solnest SEO/AEO installed successfully!" -ForegroundColor Green
 Write-Host ""
 Write-Host "Usage:" -ForegroundColor Cyan
 Write-Host "  1. Start Claude Code:  claude"

@@ -136,7 +136,7 @@ has no internal links" rather than "this was not measured", and an agent will co
 wrong finding. It now falls back to the page's own canonical or `og:url`, and says "not analyzed"
 when it genuinely cannot tell. Verified on a real site: 0/0 before, 39/4 after.
 
-All 410 upstream tests still pass.
+All 422 tests pass: 410 upstream, plus 12 covering the changes above.
 
 ---
 
@@ -145,7 +145,7 @@ All 410 upstream tests still pass.
 - Python 3.10+
 - Claude Code
 - Optional: Playwright Chromium, for SPA rendering and screenshots. The installer offers it.
-- Optional: Google API credentials for real Search Console, CrUX and GA4 data. Run `/seo google setup`.
+- Optional: Google API credentials for real Search Console, CrUX and GA4 data. Run `/solnest-seo:seo google setup`.
 
 No API keys are required. The plugin is fully functional without any paid service. Optional MCP
 extensions wrap paid tools (DataForSEO, Ahrefs, SE Ranking, Profound) if you already have accounts.
@@ -156,7 +156,10 @@ extensions wrap paid tools (DataForSEO, Ahrefs, SE Ranking, Profound) if you alr
 
 This fork tracks `AgriciDaniel/claude-seo` and is based on tag `v2.2.4`. To pull their fixes:
 
+A fresh clone has only `origin`, so add the upstream remote once:
+
 ```bash
+git remote add upstream https://github.com/AgriciDaniel/claude-seo.git
 git fetch upstream && git merge upstream/main
 ```
 

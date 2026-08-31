@@ -1,10 +1,10 @@
-# Contributing to claude-seo
+# Contributing to Solnest SEO/AEO
 
 Thanks for your interest in contributing! Here's how to get involved.
 
 ## Reporting Bugs
 
-Open a [GitHub Issue](https://github.com/AgriciDaniel/claude-seo/issues) with:
+Open a [GitHub Issue](https://github.com/Solnest-AI/solnest-seo-aeo/issues) with:
 
 - Your OS and Python version
 - The full error output (copy from terminal)
@@ -13,7 +13,8 @@ Open a [GitHub Issue](https://github.com/AgriciDaniel/claude-seo/issues) with:
 
 ## Suggesting Features
 
-Use [GitHub Discussions](https://github.com/AgriciDaniel/claude-seo/discussions) for feature ideas and questions.
+Open a [GitHub Issue](https://github.com/Solnest-AI/solnest-seo-aeo/issues) for feature ideas and questions too.
+Discussions are not enabled on this repo.
 
 ## Pull Requests
 
@@ -28,8 +29,8 @@ Use [GitHub Discussions](https://github.com/AgriciDaniel/claude-seo/discussions)
 #### Option A: Local install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/claude-seo.git
-cd claude-seo
+git clone https://github.com/YOUR_USERNAME/solnest-seo-aeo.git
+cd solnest-seo-aeo
 bash install.sh
 ```
 

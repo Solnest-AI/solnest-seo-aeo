@@ -1,5 +1,11 @@
 # Public + private repo workflow
 
+> **This is upstream's release process, not Solnest's.** It is kept verbatim from
+> `AgriciDaniel/claude-seo` so upstream merges stay clean. `Solnest-AI/solnest-seo-aeo`
+> has a single remote (`origin`) and no private mirror, so none of the remotes, branches,
+> or slugs below exist here. Nothing in this file is a step a Solnest user or contributor
+> needs to run.
+
 claude-seo is mirrored across two GitHub remotes. This document is the
 canonical reference for how work flows between them.
 
