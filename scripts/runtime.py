@@ -386,7 +386,7 @@ def command_run(args: argparse.Namespace) -> int:
         return 2
     status = _status(root)
     if not status["ready"]:
-        print("Claude SEO runtime is not ready. Run `/seo setup` and retry.", file=sys.stderr)
+        print("Claude SEO runtime is not ready. Run `/solnest-seo:seo setup` and retry.", file=sys.stderr)
         return 3
     result = subprocess.run(
         [str(status["python_path"]), str(script), *args.script_args],

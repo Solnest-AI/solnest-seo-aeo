@@ -154,9 +154,11 @@ This release merges upstream v2.4.2. The parts you will notice:
 - **Five agents now run on Opus** (`seo-content`, `seo-geo`, `seo-sxo`, `seo-cluster`,
   `seo-drift`). Better judgment, but a full audit costs more than it did on 2.2.4. To change one,
   edit the `model:` line in its file under `agents/`.
-- **Google sign-in through your own gcloud account** for Search Console. After
-  `gcloud auth application-default login`, the plugin uses that sign-in when no OAuth token or
-  service account is set up. Set `CLAUDE_SEO_GOOGLE_AUTH=adc` to prefer it over a service account.
+- **Google sign-in through your own gcloud account** for Search Console, opt-in only. After
+  `gcloud auth application-default login`, set `CLAUDE_SEO_GOOGLE_AUTH=adc` and the plugin uses
+  that sign-in ahead of any OAuth token or service account. Without that setting it is never
+  used, even if it exists on your machine. (Upstream falls back to it automatically. This fork
+  does not.)
 - **Matomo extension** for analytics without Google.
 - Google guidance refreshed through 2026-09-28, plus upstream security fixes. The full list is in
   [CHANGELOG.md](CHANGELOG.md).

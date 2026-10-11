@@ -414,8 +414,10 @@ def get_oauth_credentials(scopes: list):
             except ImportError:
                 print("Error: google-auth required. Install with: pip install google-auth", file=sys.stderr)
 
-    # Fall back to service account, then to the person's gcloud sign-in.
-    return get_service_account_credentials(scopes) or get_gcloud_credentials(scopes)
+    # Fall back to service account only. The person's own gcloud sign-in is used
+    # solely when chosen with CLAUDE_SEO_GOOGLE_AUTH=adc (handled above), so a
+    # stray `gcloud auth application-default login` is never picked up silently.
+    return get_service_account_credentials(scopes)
 
 
 def run_oauth_flow(creds_path: str):
@@ -666,9 +668,14 @@ def check_credentials(service: str) -> dict:
             # Fall back to service account
             sa_path = config.get("service_account_path")
             if not sa_path and _load_gcloud_adc() is not None:
-                result["available"] = True
-                result["method"] = "gcloud_adc"
-                result["account"] = _load_gcloud_adc().get("account")
+                # Opt-in only: report the sign-in we found, but do not use it.
+                adc_account = _load_gcloud_adc().get("account") or "your gcloud account"
+                result["error"] = (
+                    f"Found a gcloud sign-in for {adc_account}, but it is only used when you opt in. "
+                    "Set CLAUDE_SEO_GOOGLE_AUTH=adc to use it, or:\n"
+                    "         1. Run: python scripts/google_auth.py --auth --creds /path/to/client_secret.json\n"
+                    f"         2. Or add 'service_account_path' to {CONFIG_PATH}"
+                )
             elif not sa_path:
                 result["error"] = (
                     "No OAuth token or service account found. Either:\n"

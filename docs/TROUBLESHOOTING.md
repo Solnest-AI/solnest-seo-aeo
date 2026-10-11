@@ -53,7 +53,7 @@ Dependencies belong in the managed runtime. For a plugin install, run:
 
 ```bash
 /seo doctor
-/seo setup
+/solnest-seo:seo setup
 ```
 
 For a manual install, run:
@@ -105,7 +105,7 @@ curl -fsSL https://raw.githubusercontent.com/Solnest-AI/solnest-seo-aeo/main/req
 **Solution:** rerun managed setup so the browser is installed through the same
 interpreter and persistent browser directory:
 ```bash
-/seo setup
+/solnest-seo:seo setup
 /seo doctor
 ```
 

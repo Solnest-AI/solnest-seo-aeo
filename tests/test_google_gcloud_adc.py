@@ -45,8 +45,19 @@ def test_a_service_account_in_the_gcloud_file_is_not_the_person(isolated):
     assert google_auth._load_gcloud_adc() is None
 
 
-def test_gcloud_is_the_fallback_when_nothing_else_is_configured(isolated):
+def test_gcloud_is_not_used_without_opt_in(isolated):
+    # Solnest fork: a gcloud sign-in on the machine must never be picked up silently.
     _adc(isolated)
+    creds = google_auth.get_oauth_credentials(["https://www.googleapis.com/auth/webmasters.readonly"])
+    assert creds is None
+    check = google_auth.check_credentials("gsc")
+    assert not check["available"]
+    assert "person@example.com" in check["error"] and "CLAUDE_SEO_GOOGLE_AUTH=adc" in check["error"]
+
+
+def test_opt_in_uses_gcloud_when_nothing_else_is_configured(isolated, monkeypatch):
+    _adc(isolated)
+    monkeypatch.setenv("CLAUDE_SEO_GOOGLE_AUTH", "adc")
     creds = google_auth.get_oauth_credentials(["https://www.googleapis.com/auth/webmasters.readonly"])
     assert creds is not None and creds.refresh_token == "r"
     check = google_auth.check_credentials("gsc")

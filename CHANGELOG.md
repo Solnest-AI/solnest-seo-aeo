@@ -18,9 +18,12 @@ unchanged. Everything the fork added at 2.2.4 is kept.
   Markdown delivery and WebMCP. It also runs inside a full audit.
 - **Five agents run on Opus** (`seo-content`, `seo-geo`, `seo-sxo`, `seo-cluster`, `seo-drift`).
   A full audit costs more than on 2.2.4. The `model:` line in each agent file controls it.
-- **gcloud sign-in.** Google APIs fall back to the user's own
-  `gcloud auth application-default login` when no OAuth token or service account is set.
-  `CLAUDE_SEO_GOOGLE_AUTH=adc` prefers it over a service account.
+- **gcloud sign-in, opt-in only in this fork.** Upstream falls back to the user's own
+  `gcloud auth application-default login` whenever no OAuth token or service account is set.
+  The fork changes that: the gcloud sign-in is used only with `CLAUDE_SEO_GOOGLE_AUTH=adc`.
+  Without it, `check_credentials` names the sign-in it found and explains the opt-in.
+- **Setup hint fixed.** The "runtime is not ready" message now says `/solnest-seo:seo setup`.
+  Upstream's `/seo setup` does not exist under the fork's plugin name.
 - **Matomo extension** and a Keywords Everywhere backlinks fallback.
 - **Security fixes**, including a cache-path traversal, a WHOIS referral SSRF, the RFC 6598
   address range refused, and a browser-like default User-Agent for every raw fetch.
