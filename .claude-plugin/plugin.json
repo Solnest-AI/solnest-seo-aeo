@@ -1,6 +1,6 @@
 {
   "name": "solnest-seo",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "Solnest AI SEO and AEO plugin for Claude Code. 27 sub-skills (23 core + 1 orchestrator + 1 framework + 2 extension mirrors) and 19 sub-agents covering technical SEO, content quality, schema, Core Web Vitals, local SEO, backlinks, AI search visibility, and AI agent readiness. Adds a dedicated AEO audit that verifies AI search-crawler access at the CDN edge, checks brand entity consistency, and separates evidence-backed levers from AEO myths. Fork of claude-seo v2.4.2 (MIT, agricidaniel).",
   "author": {
     "name": "Solnest AI",

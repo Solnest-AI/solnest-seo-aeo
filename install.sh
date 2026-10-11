@@ -19,7 +19,7 @@ main() {
     # If the tag is not published yet the clone falls back to the default
     # branch, so the installer never silently installs nothing.
     # Override: CLAUDE_SEO_TAG=main bash install.sh
-    REPO_TAG="${CLAUDE_SEO_TAG:-v2.4.2}"
+    REPO_TAG="${CLAUDE_SEO_TAG:-v2.4.3}"
 
     echo "════════════════════════════════════════"
     echo "║   Solnest SEO/AEO - Installer        ║"

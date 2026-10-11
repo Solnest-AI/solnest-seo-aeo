@@ -124,7 +124,7 @@ $RepoUrl = "https://github.com/Solnest-AI/solnest-seo-aeo"
 # If the tag is not published yet the clone falls back to the default branch,
 # so the installer never silently installs nothing.
 # Override: $env:CLAUDE_SEO_TAG = 'main'; .\install.ps1
-$RepoTag = if ($env:CLAUDE_SEO_TAG) { $env:CLAUDE_SEO_TAG } else { 'v2.4.2' }
+$RepoTag = if ($env:CLAUDE_SEO_TAG) { $env:CLAUDE_SEO_TAG } else { 'v2.4.3' }
 
 # Create directories
 New-Item -ItemType Directory -Force -Path $SkillDir | Out-Null
