@@ -7,7 +7,7 @@
 
 ## Prerequisites
 
-- **Python 3.10+** with pip
+- **Python 3.10+** with pip (3.10 reaches end of life in October 2026; prefer 3.11 or newer)
 - **Git** for cloning the repository
 - **Claude Code CLI** installed and configured
 
@@ -26,7 +26,7 @@ The recommended path. Inside Claude Code:
 /solnest-seo:seo setup
 ```
 
-You have to type these yourself — they are interactive slash commands, so Claude cannot run
+You have to type these yourself. They are interactive slash commands, so Claude cannot run
 them for you. If the `/plugin` browser is not available in your client, use the declarative
 block in [INSTALL.md](../INSTALL.md) instead.
 
@@ -81,7 +81,7 @@ used by every skill. It creates `~/.claude/skills/seo/.venv/` and never falls
 back to global or user package installation.
 
 ```bash
-~/.claude/skills/seo/bin/claude-seo doctor
+~/.claude/skills/seo/scripts/claude-seo doctor
 ```
 
 If core setup failed, rerun the inspected installer. If only Chromium failed,
@@ -96,7 +96,7 @@ The installer copies files to:
 | Main skill | `~/.claude/skills/seo/` |
 | Sub-skills | `~/.claude/skills/seo-*/` |
 | Subagents | `~/.claude/agents/seo-*.md` |
-| Runtime launcher | `~/.claude/skills/seo/bin/claude-seo` |
+| Runtime launcher | `~/.claude/skills/seo/scripts/claude-seo` |
 | Isolated Python | `~/.claude/skills/seo/.venv/` |
 
 ## Verify Installation
@@ -164,7 +164,7 @@ If the file doesn't exist, re-run the installer.
 Run the managed setup again:
 
 ```bash
-~/.claude/skills/seo/bin/claude-seo setup
+~/.claude/skills/seo/scripts/claude-seo setup
 ```
 
 ### Playwright screenshot errors
@@ -172,8 +172,8 @@ Run the managed setup again:
 Run the managed setup again and inspect the result:
 
 ```bash
-~/.claude/skills/seo/bin/claude-seo setup
-~/.claude/skills/seo/bin/claude-seo doctor
+~/.claude/skills/seo/scripts/claude-seo setup
+~/.claude/skills/seo/scripts/claude-seo doctor
 ```
 
 ### Permission errors on Unix

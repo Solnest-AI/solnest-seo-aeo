@@ -14,7 +14,7 @@ argument-hint: "[url]"
 license: MIT
 metadata:
   author: Solnest AI
-  version: "2.2.4"
+  version: "2.4.2"
   category: seo
 ---
 
@@ -77,7 +77,7 @@ and completely invisible in robots.txt.
 Run the check with the bundled runtime:
 
 ```bash
-claude-seo run aeo_crawler_check.py <url>
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run aeo_crawler_check.py <url>
 ```
 
 Also confirm the page is indexable and snippet-eligible. `noindex`, or
@@ -101,7 +101,7 @@ Check that the legal or trading name is **byte-identical** across:
 Diff the machine-readable surfaces against each other:
 
 ```bash
-claude-seo run aeo_entity_check.py <url>
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run aeo_entity_check.py <url>
 ```
 
 The two failure modes worth knowing, both seen in the wild:
@@ -211,8 +211,8 @@ Both bundled scripts accept `--json`, so capture their output directly rather th
 retyping their results:
 
 ```bash
-claude-seo run aeo_crawler_check.py <url> --json
-claude-seo run aeo_entity_check.py <url> --json
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run aeo_crawler_check.py <url> --json
+"${CLAUDE_PLUGIN_ROOT}/scripts/claude-seo" run aeo_entity_check.py <url> --json
 ```
 
 After writing the files, tell the user where they are. If `audit-data.json` from a

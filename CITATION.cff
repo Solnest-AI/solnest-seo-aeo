@@ -13,8 +13,8 @@ authors:
 repository-code: 'https://github.com/Solnest-AI/solnest-seo-aeo'
 url: 'https://github.com/Solnest-AI/solnest-seo-aeo'
 license: MIT
-version: 2.2.4
-date-released: '2026-08-18'
+version: 2.4.2
+date-released: '2026-10-11'
 keywords:
   - seo
   - claude-code

@@ -3,14 +3,14 @@
 **SEO and AEO for Claude Code.** Audit any site for classic search, then audit whether ChatGPT,
 Claude, Perplexity, Gemini and Google AI Overviews can actually find, read, and cite it.
 
-26 sub-skills and 18 sub-agents run in parallel across technical SEO, content quality (E-E-A-T),
-Schema.org, Core Web Vitals, local SEO, backlinks, and AI search visibility. Every audit ends in a
+27 sub-skills and 19 sub-agents run in parallel across technical SEO, content quality (E-E-A-T),
+Schema.org, Core Web Vitals, local SEO, backlinks, AI search visibility, and AI agent readiness. Every audit ends in a
 prioritised action plan, not a score you cannot act on.
 
 Built by [Solnest AI](https://solnestai.com) for the Solnest AI community.
 
 > **Attribution.** Solnest SEO is a fork of [claude-seo](https://github.com/AgriciDaniel/claude-seo)
-> v2.2.4 by agricidaniel, used under the MIT licence. We did not write the 25 upstream sub-skills and
+> v2.4.2 by agricidaniel, used under the MIT licence. We did not write the 26 upstream sub-skills and
 > we do not claim to. What we added is listed under [What Solnest changed](#what-solnest-changed).
 > This project is not affiliated with or endorsed by the upstream author. See [NOTICE](NOTICE).
 
@@ -121,7 +121,9 @@ crawler and reports what actually happens.
 
 It also fixes the mistake almost everyone makes. `GPTBot` and `ClaudeBot` are **training** crawlers.
 `OAI-SearchBot` and `Claude-SearchBot` are the ones that control **citation**. Blocking the training
-bot does not remove you from that engine's answers. Upstream did not list `Claude-SearchBot` at all.
+bot does not remove you from that engine's answers. Upstream v2.2.4 did not list `Claude-SearchBot`
+at all. Upstream has since added it, and the fork now carries their fuller crawler table plus this
+edge check.
 
 **3. `scripts/aeo_entity_check.py`.** New. Diffs your brand name across `<title>`, `og:site_name`,
 JSON-LD `Organization` / `LocalBusiness`, and `llms.txt`. When your own surfaces disagree, retrieval
@@ -136,13 +138,37 @@ has no internal links" rather than "this was not measured", and an agent will co
 wrong finding. It now falls back to the page's own canonical or `og:url`, and says "not analyzed"
 when it genuinely cannot tell. Verified on a real site: 0/0 before, 39/4 after.
 
-All 422 tests pass: 410 upstream, plus 12 covering the changes above.
+All 1,035 tests pass on this release (3 live-network tests skip by default): 1,023 upstream, plus
+12 covering the `parse_html.py` fixes. The two AEO scripts have no automated tests yet. For this
+release they were checked with a live run against our own site.
+
+---
+
+## New from upstream in this release
+
+This release merges upstream v2.4.2. The parts you will notice:
+
+- **`/solnest-seo:seo agentic <url>`.** Agent readiness: Lighthouse's Agentic Browsing score,
+  AI agent access in robots.txt, llms.txt, Markdown delivery, and WebMCP. It runs inside a full
+  audit too.
+- **Five agents now run on Opus** (`seo-content`, `seo-geo`, `seo-sxo`, `seo-cluster`,
+  `seo-drift`). Better judgment, but a full audit costs more than it did on 2.2.4. To change one,
+  edit the `model:` line in its file under `agents/`.
+- **Google sign-in through your own gcloud account** for Search Console. After
+  `gcloud auth application-default login`, the plugin uses that sign-in when no OAuth token or
+  service account is set up. Set `CLAUDE_SEO_GOOGLE_AUTH=adc` to prefer it over a service account.
+- **Matomo extension** for analytics without Google.
+- Google guidance refreshed through 2026-09-28, plus upstream security fixes. The full list is in
+  [CHANGELOG.md](CHANGELOG.md).
+
+Upstream also ships an optional companion plugin, `seo-cockpit`. We do not list it in the Solnest
+marketplace yet: it looks for a plugin named `claude-seo`, so it would not find this one.
 
 ---
 
 ## Requirements
 
-- Python 3.10+
+- Python 3.10+ (3.10 reaches end of life in October 2026, so use 3.11 or newer for a new install)
 - Claude Code
 - Optional: Playwright Chromium, for SPA rendering and screenshots. The installer offers it.
 - Optional: Google API credentials for real Search Console, CrUX and GA4 data. Run `/solnest-seo:seo google setup`.
@@ -154,13 +180,13 @@ extensions wrap paid tools (DataForSEO, Ahrefs, SE Ranking, Profound) if you alr
 
 ## Staying current with upstream
 
-This fork tracks `AgriciDaniel/claude-seo` and is based on tag `v2.2.4`. To pull their fixes:
+This fork tracks `AgriciDaniel/claude-seo` and is based on tag `v2.4.2`. To pull their fixes:
 
 A fresh clone has only `origin`, so add the upstream remote once:
 
 ```bash
 git remote add upstream https://github.com/AgriciDaniel/claude-seo.git
-git fetch upstream && git merge upstream/main
+git fetch upstream --tags && git merge vX.Y.Z   # merge a release tag, not main
 ```
 
 We deliberately kept upstream's internal skill and script names so these merges stay clean. Only

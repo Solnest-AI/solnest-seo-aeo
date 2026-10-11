@@ -25,7 +25,7 @@ from urllib.robotparser import RobotFileParser
 _SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
-from url_safety import safe_requests_get
+from url_safety import safe_requests_get  # noqa: E402
 
 # role: "search" bots decide citation eligibility. "training" bots do not.
 CRAWLERS = [

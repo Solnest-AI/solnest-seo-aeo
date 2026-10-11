@@ -53,7 +53,7 @@ print('Saved to',p)
 Check it worked:
 
 ```bash
-~/.claude/plugins/cache/solnest-ai/solnest-seo/*/bin/claude-seo run google_auth.py --tier
+~/.claude/plugins/cache/solnest-ai/solnest-seo/*/scripts/claude-seo run google_auth.py --tier
 ```
 
 You should see **Tier 0**, which unlocks `pagespeed`, `crux`, `crux-history`, `youtube` and `nlp`.
@@ -202,11 +202,11 @@ Easiest way is to just ask Claude: "what Google SEO credential tier am I on?"
 To run it directly, the launcher lives inside the installed plugin:
 
 ```bash
-~/.claude/plugins/cache/solnest-ai/solnest-seo/*/bin/claude-seo run google_auth.py --tier
+~/.claude/plugins/cache/solnest-ai/solnest-seo/*/scripts/claude-seo run google_auth.py --tier
 ```
 
 ```bash
-~/.claude/plugins/cache/solnest-ai/solnest-seo/*/bin/claude-seo run google_auth.py --check
+~/.claude/plugins/cache/solnest-ai/solnest-seo/*/scripts/claude-seo run google_auth.py --check
 ```
 
 `--tier` prints which tier you reached and what the next one needs. `--check` lists every API and

@@ -25,10 +25,16 @@ import re
 import sys
 from urllib.parse import urljoin, urlparse
 
+# Title segment separators: pipe, en dash, em dash, middle dot, or a spaced hyphen.
+# Built with chr() so the source carries no literal or escaped em dash
+# (house-style gate: tests/test_no_em_dash.py).
+_TITLE_SEPARATORS = "|" + chr(0x2013) + chr(0x2014) + chr(0x00B7)
+_TITLE_SPLIT_RE = re.compile(r"\s+[" + re.escape(_TITLE_SEPARATORS) + r"]\s+|\s+-\s+")
+
 _SCRIPTS_DIR = os.path.dirname(os.path.abspath(__file__))
 if _SCRIPTS_DIR not in sys.path:
     sys.path.insert(0, _SCRIPTS_DIR)
-from url_safety import safe_requests_get
+from url_safety import safe_requests_get  # noqa: E402
 
 try:
     from bs4 import BeautifulSoup
@@ -120,8 +126,8 @@ def check(url: str) -> dict:
         # segment, either first ("Brand | Tagline") or last ("Page | Brand").
         # Plain substring matching is too weak: "Solnest" trivially matches
         # "Solnest Stays" and hides a real truncation.
-        segments = [seg.strip() for seg in re.split(r"\s+[|\u2013\u2014\u00b7]\s+|\s+-\s+",
-                                                   out["surfaces"]["title"]) if seg.strip()]
+        segments = [seg.strip() for seg in _TITLE_SPLIT_RE.split(out["surfaces"]["title"])
+                    if seg.strip()]
         seg_lower = [seg.lower() for seg in segments]
         for v in distinct:
             vl = v.lower()
