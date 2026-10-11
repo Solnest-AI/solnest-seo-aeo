@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any
 
 RUNTIME_SCHEMA = 1
+DEFAULT_PLUGIN_NAME = "solnest-seo"
 LOCK_STALE_SECONDS = 30 * 60
 SCRIPT_NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]*\.py$")
 EXTENSION_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9-]*$")
@@ -97,8 +98,43 @@ def _requirements_hash(root: Path) -> str:
     return hashlib.sha256(content).hexdigest()
 
 
+def _plugin_name(root: Path) -> str:
+    for manifest in (root / ".claude-plugin" / "plugin.json", root / "runtime-plugin.json"):
+        try:
+            value = json.loads(manifest.read_text(encoding="utf-8")).get("name")
+            if isinstance(value, str) and value:
+                return value
+        except (AttributeError, OSError, ValueError):
+            pass
+    return DEFAULT_PLUGIN_NAME
+
+
+def _owned_plugin_data(root: Path) -> str | None:
+    """Return CLAUDE_PLUGIN_DATA only when it is this plugin's own directory.
+
+    Claude Code names a plugin's data directory "<plugin>-<marketplace>".
+    Some plugins export their own CLAUDE_PLUGIN_DATA from a SessionStart hook,
+    which puts it in every Bash command of the session. Without this check
+    setup would build its venv and browser inside that other plugin's folder.
+    """
+    raw = os.environ.get("CLAUDE_PLUGIN_DATA")
+    if not raw:
+        return None
+    name = _plugin_name(root)
+    folder = Path(raw).expanduser().name
+    return raw if folder == name or folder.startswith(f"{name}-") else None
+
+
+def _foreign_plugin_data(root: Path) -> str | None:
+    """Folder name of a CLAUDE_PLUGIN_DATA that was ignored, for diagnostics."""
+    raw = os.environ.get("CLAUDE_PLUGIN_DATA")
+    if not raw or _owned_plugin_data(root):
+        return None
+    return Path(raw).expanduser().name
+
+
 def _is_plugin(root: Path) -> bool:
-    if os.environ.get("CLAUDE_PLUGIN_DATA") or os.environ.get("CLAUDE_PLUGIN_ROOT"):
+    if _owned_plugin_data(root) or os.environ.get("CLAUDE_PLUGIN_ROOT"):
         return True
     return (root / ".claude-plugin" / "plugin.json").is_file() and not (root / ".git").exists()
 
@@ -120,7 +156,7 @@ def _data_dir(root: Path) -> tuple[Path, str]:
     override = os.environ.get("CLAUDE_SEO_DATA_DIR")
     if override:
         return _configured_data_dir(override), "override"
-    plugin_data = os.environ.get("CLAUDE_PLUGIN_DATA")
+    plugin_data = _owned_plugin_data(root)
     if plugin_data:
         return _configured_data_dir(plugin_data), "plugin"
     if _is_plugin(root):
@@ -287,6 +323,9 @@ def command_setup(args: argparse.Namespace) -> int:
     swapped = False
     committed = False
     had_previous = final_venv.exists()
+    foreign = _foreign_plugin_data(root)
+    if foreign:
+        print(f"Ignoring CLAUDE_PLUGIN_DATA: it belongs to another plugin ({foreign}).", file=sys.stderr)
     try:
         with SetupLock(data_dir / ".setup.lock"):
             print("Creating isolated Claude SEO environment...", flush=True)
@@ -399,7 +438,8 @@ def command_run(args: argparse.Namespace) -> int:
 
 
 def command_doctor(args: argparse.Namespace) -> int:
-    status = _status(_root())
+    root = _root()
+    status = _status(root)
     public = {
         "ready": status["ready"],
         "mode": status["mode"],
@@ -413,6 +453,9 @@ def command_doctor(args: argparse.Namespace) -> int:
     else:
         print(f"Runtime: {'ready' if public['ready'] else 'setup required'}")
         print(f"Install mode: {public['mode']}")
+        foreign = _foreign_plugin_data(root)
+        if foreign:
+            print(f"Ignored CLAUDE_PLUGIN_DATA from another plugin: {foreign}")
         print(f"Python: {public['python_version']}")
         print(f"Chromium: {'ready' if public['browser_ready'] else 'not installed'}")
         for reason in public["reasons"]:

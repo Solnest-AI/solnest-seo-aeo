@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+
+- **Setup no longer builds inside another plugin's data folder.** Some plugins (the
+  Grok Build, Codex and Gemini bridges among them) export their own `CLAUDE_PLUGIN_DATA`
+  into every Bash command of a session. The runtime trusted that value, so
+  `/solnest-seo:seo setup` could put its Python environment and Chromium (about 1.3 GB)
+  in another plugin's folder, and a source checkout could flip into plugin mode. The
+  runtime now uses `CLAUDE_PLUGIN_DATA` only when the folder is named for this plugin
+  (`solnest-seo` or `solnest-seo-<marketplace>`). Anything else is ignored, `setup`
+  prints a note, and `doctor` names the folder it skipped.
+
 ## [2.4.2-solnest] - 2026-10-11
 
 Merges upstream `AgriciDaniel/claude-seo` v2.4.2 into the fork (upstream releases 2.2.5

@@ -20,6 +20,26 @@ runtime = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(runtime)
 
 
+@pytest.fixture(autouse=True)
+def _sandbox_home(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Path:
+    # A rejected CLAUDE_PLUGIN_DATA falls back to a per-user data directory.
+    # Point every per-user location at a temp dir so no test can write there.
+    home = tmp_path / "sandbox home"
+    home.mkdir()
+    for name in ("HOME", "USERPROFILE"):
+        monkeypatch.setenv(name, str(home))
+    monkeypatch.setenv("LOCALAPPDATA", str(home / "AppData" / "Local"))
+    monkeypatch.setenv("XDG_DATA_HOME", str(home / ".local" / "share"))
+    monkeypatch.delenv("CLAUDE_SEO_DATA_DIR", raising=False)
+    monkeypatch.delenv("CLAUDE_PLUGIN_ROOT", raising=False)
+    return home
+
+
+def _owned_data(tmp_path: Path) -> Path:
+    # Claude Code names a plugin's data directory "<plugin>-<marketplace>".
+    return tmp_path / "solnest-seo-solnest-ai"
+
+
 def _fixture_root(tmp_path: Path) -> Path:
     root = tmp_path / "plugin root"
     (root / "scripts").mkdir(parents=True)
@@ -56,7 +76,7 @@ def test_manual_extension_fallback_stays_inside_installed_skill(tmp_path: Path) 
 
 def test_status_uses_plugin_data_and_hash_marker(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     root = _fixture_root(tmp_path)
-    data = tmp_path / "persistent data"
+    data = _owned_data(tmp_path)
     python = data / ".venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
     python.parent.mkdir(parents=True)
     python.write_text("", encoding="utf-8")
@@ -83,11 +103,141 @@ def test_source_checkout_uses_repository_venv_without_plugin_environment(
     assert mode == "manual"
 
 
+FOREIGN_PLUGIN_DATA = "grok-build-xai-grok-build"
+
+
+def _foreign_data(tmp_path: Path) -> Path:
+    # Another plugin's data directory. Some plugins export their own
+    # CLAUDE_PLUGIN_DATA from a SessionStart hook, which puts it in the
+    # environment of every Bash command in the session, ours included.
+    return tmp_path / "plugins data" / FOREIGN_PLUGIN_DATA
+
+
+@pytest.mark.parametrize("name", ["solnest-seo", "solnest-seo-solnest-ai", "solnest-seo-inline"])
+def test_plugin_data_named_for_this_plugin_is_used(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, name: str
+) -> None:
+    root = _fixture_root(tmp_path)
+    data = tmp_path / name
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(data))
+    assert runtime._data_dir(root) == (data.resolve(), "plugin")
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        FOREIGN_PLUGIN_DATA,
+        "codex-openai-codex",
+        "gemini-google-gemini",
+        "my-solnest-seo-helper-marketplace",
+        "solnest-seo2-solnest-ai",
+        "data",
+    ],
+)
+def test_plugin_data_from_another_plugin_is_ignored(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, _sandbox_home: Path, name: str
+) -> None:
+    root = _fixture_root(tmp_path)
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(tmp_path / "plugins data" / name))
+    data_dir, mode = runtime._data_dir(root)
+    assert mode == "plugin-fallback"
+    assert data_dir.is_relative_to(_sandbox_home.resolve())
+
+
+def test_plugin_name_for_the_data_dir_check_comes_from_the_manifest(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = _fixture_root(tmp_path)
+    (root / ".claude-plugin" / "plugin.json").write_text(
+        '{"name":"claude-seo","version":"2.4.2"}\n', encoding="utf-8"
+    )
+    upstream = tmp_path / "claude-seo-agricidaniel"
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(upstream))
+    assert runtime._data_dir(root) == (upstream.resolve(), "plugin")
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(_owned_data(tmp_path)))
+    assert runtime._data_dir(root)[1] == "plugin-fallback"
+
+
+def test_foreign_plugin_data_keeps_a_source_checkout_in_manual_mode(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root = _fixture_root(tmp_path)
+    (root / ".git").mkdir()
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(_foreign_data(tmp_path)))
+    assert runtime._data_dir(root) == (root, "manual")
+
+
+def test_foreign_plugin_data_keeps_a_manual_install_in_manual_mode(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    # install.sh copies the manifest to runtime-plugin.json and ships no
+    # .claude-plugin directory.
+    root = tmp_path / "skills" / "seo"
+    root.mkdir(parents=True)
+    (root / "runtime-plugin.json").write_text(
+        '{"name":"solnest-seo","version":"2.4.2"}\n', encoding="utf-8"
+    )
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(_foreign_data(tmp_path)))
+    assert runtime._data_dir(root) == (root, "manual")
+
+
+def test_setup_never_writes_into_another_plugins_data_dir(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture[str],
+    _sandbox_home: Path,
+) -> None:
+    root = _fixture_root(tmp_path)
+    foreign = _foreign_data(tmp_path)
+    (foreign / "state" / "jobs").mkdir(parents=True)
+    (foreign / "state" / "state.json").write_text('{"jobs":[]}', encoding="utf-8")
+    before = sorted(path.relative_to(foreign) for path in foreign.rglob("*"))
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(foreign))
+    monkeypatch.setattr(runtime, "_root", lambda: root)
+
+    def fake_checked(argv: list[str], *, env: dict[str, str], stage: str) -> subprocess.CompletedProcess[str]:
+        if stage == "virtual environment creation":
+            staged_python = runtime._venv_python(Path(argv[-1]))
+            staged_python.parent.mkdir(parents=True)
+            staged_python.write_text("new", encoding="utf-8")
+        return subprocess.CompletedProcess(argv, 0, "", "")
+
+    monkeypatch.setattr(runtime, "_run_checked", fake_checked)
+    rc = runtime.command_setup(SimpleNamespace(skip_browser=True))
+    assert rc == 0
+    assert sorted(path.relative_to(foreign) for path in foreign.rglob("*")) == before
+    status = runtime._status(root)
+    assert status["ready"] is True
+    assert status["data_dir"].is_relative_to(_sandbox_home.resolve())
+    assert FOREIGN_PLUGIN_DATA in capsys.readouterr().err
+
+
+def test_doctor_names_the_ignored_plugin_data_dir_but_not_its_path(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = _fixture_root(tmp_path)
+    foreign = _foreign_data(tmp_path)
+    monkeypatch.setattr(runtime, "_root", lambda: root)
+    monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(foreign))
+    runtime.command_doctor(SimpleNamespace(json=False))
+    text = capsys.readouterr().out
+    assert "Install mode: plugin-fallback" in text
+    assert "Ignored CLAUDE_PLUGIN_DATA" in text
+    assert FOREIGN_PLUGIN_DATA in text
+    assert str(foreign) not in text
+    runtime.command_doctor(SimpleNamespace(json=True))
+    output = capsys.readouterr().out
+    assert str(foreign) not in output
+    assert set(json.loads(output)) == {
+        "browser_ready", "mode", "plugin_version", "python_version", "ready", "reasons"
+    }
+
+
 def test_doctor_json_omits_paths_and_environment_values(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
 ) -> None:
     root = _fixture_root(tmp_path)
-    sensitive_path = tmp_path / "person-name" / "private"
+    sensitive_path = tmp_path / "person-name" / "solnest-seo-private"
     monkeypatch.setattr(runtime, "_root", lambda: root)
     monkeypatch.setenv("CLAUDE_PLUGIN_DATA", str(sensitive_path))
     rc = runtime.command_doctor(SimpleNamespace(json=True))
@@ -119,7 +269,7 @@ def test_configured_data_dir_rejects_filesystem_root_and_user_home(
 
 def test_version_only_change_does_not_stale_environment(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     root = _fixture_root(tmp_path)
-    data = tmp_path / "data"
+    data = _owned_data(tmp_path)
     python = data / ".venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
     python.parent.mkdir(parents=True)
     python.write_text("", encoding="utf-8")
@@ -146,7 +296,7 @@ def test_error_redaction_hides_credentials_and_tokens() -> None:
 
 def test_browser_marker_requires_browser_files(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     root = _fixture_root(tmp_path)
-    data = tmp_path / "data"
+    data = _owned_data(tmp_path)
     python = data / ".venv" / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
     python.parent.mkdir(parents=True)
     python.write_text("", encoding="utf-8")
@@ -164,7 +314,7 @@ def test_setup_restores_previous_environment_when_staged_swap_fails(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     root = _fixture_root(tmp_path)
-    data = tmp_path / "data"
+    data = _owned_data(tmp_path)
     final = data / ".venv"
     old_python = final / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
     old_python.parent.mkdir(parents=True)
@@ -330,7 +480,7 @@ def test_browser_setup_warning_is_redacted(
     # redacted at its own print site instead of relying on the one at the
     # bottom of command_setup.
     root = _fixture_root(tmp_path)
-    data = tmp_path / "data"
+    data = _owned_data(tmp_path)
     data.mkdir(parents=True, exist_ok=True)
     (data / "runtime-state.json").write_text(
         json.dumps(runtime._expected(root)), encoding="utf-8"
