@@ -27,7 +27,7 @@ def test_windows_installer_delegates_to_runtime_without_path_mutation() -> None:
     assert "SetEnvironmentVariable('PATH'" not in text
     assert "pip','install" not in text
     assert "UTF8Encoding($false)" in text
-    assert "version_info >= (3, 10)" in text
+    assert "(3, 11) <= sys.version_info[:2] < (3, 15)" in text
     assert "$runtime.ExitCode -ne 0 -and $runtime.ExitCode -ne 10" in text
     assert "-Directory -Filter 'seo*'" not in text
 
@@ -41,7 +41,8 @@ def test_launcher_is_executable() -> None:
 
 def test_launcher_uses_safe_exec() -> None:
     text = (ROOT / "scripts/claude-seo").read_text(encoding="utf-8")
-    assert 'exec py -3 "${runtime}" "$@"' in text
-    assert 'exec python3 "${runtime}" "$@"' in text
-    assert 'exec python "${runtime}" "$@"' in text
+    assert 'exec py "-${v}" "${runtime}" "$@"' in text
+    assert 'exec "${exe}" "${runtime}" "$@"' in text
+    assert "for v in 3.14 3.13 3.12 3.11 3; do" in text
+    assert "for exe in python3.14 python3.13 python3.12 python3.11 python3 python; do" in text
     assert "eval " not in text

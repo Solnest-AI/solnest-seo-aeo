@@ -3,6 +3,7 @@
 # Last updated: September 23, 2026 (v2.4.0 floors)
 
 beautifulsoup4>=4.15.0,<5.0.0     # No known CVEs
+soupsieve>=4.0.0,<5.0.0           # bs4 dependency; PYSEC advisories fixed in 4.0.0 (needs Python 3.11+)
 requests>=2.34.2,<3.0.0           # CVE-2024-47081, CVE-2024-35195 fixes
 lxml>=6.1.1,<7.0.0                # CVE-2025-24928 + additional libxml2 security patches
 lxml_html_clean>=0.4.5,<1.0.0     # lxml 6 removed html.clean into this standalone package
@@ -19,6 +20,7 @@ matplotlib>=3.9.0,<4.0.0              # No known CVEs
 numpy>=2.2.6,<3.0.0                   # Direct import in google_report.py; matplotlib>=3.9 is the first numpy 2 release line
 weasyprint>=70.0,<71.0                # PYSEC-2026-3940 fixed in 70.0
 openpyxl>=3.1.5,<4.0.0                # No known CVEs (Excel export)
+pillow>=13.0.0,<14.0.0                # matplotlib/weasyprint dependency; 42 PYSEC-2026 advisories fixed in 13.0.0
 
 # Google API dependencies (for seo-google skill)
 google-api-python-client>=2.196.0,<3.0.0   # No known CVEs

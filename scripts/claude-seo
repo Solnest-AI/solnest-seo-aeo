@@ -18,22 +18,29 @@ fi
 # An override is an executable path, not a shell command. Keeping it as one
 # array element prevents command injection and supports paths containing spaces.
 if [[ -n "${CLAUDE_SEO_PYTHON:-}" ]]; then
-    if "${CLAUDE_SEO_PYTHON}" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)' >/dev/null 2>&1; then
+    if "${CLAUDE_SEO_PYTHON}" -c 'import sys; raise SystemExit(0 if (3, 11) <= sys.version_info[:2] < (3, 15) else 1)' >/dev/null 2>&1; then
         exec "${CLAUDE_SEO_PYTHON}" "${runtime}" "$@"
     fi
-    echo "CLAUDE_SEO_PYTHON is not a usable Python 3.10+ executable." >&2
+    echo "CLAUDE_SEO_PYTHON is not a usable Python 3.11 to 3.14 executable." >&2
     exit 2
 fi
 
-if command -v py >/dev/null 2>&1 && py -3 -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)' >/dev/null 2>&1; then
-    exec py -3 "${runtime}" "$@"
+# Supported: Python 3.11 to 3.14. google-ads has no build for 3.15 yet, and the
+# fixed Pillow and soupsieve need 3.11+. Try exact versions first, so a machine
+# whose newest Python is 3.15 still gets a supported one.
+ok='import sys; raise SystemExit(0 if (3, 11) <= sys.version_info[:2] < (3, 15) else 1)'
+if command -v py >/dev/null 2>&1; then
+    for v in 3.14 3.13 3.12 3.11 3; do
+        if py "-${v}" -c "${ok}" >/dev/null 2>&1; then
+            exec py "-${v}" "${runtime}" "$@"
+        fi
+    done
 fi
-if command -v python3 >/dev/null 2>&1 && python3 -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)' >/dev/null 2>&1; then
-    exec python3 "${runtime}" "$@"
-fi
-if command -v python >/dev/null 2>&1 && python -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)' >/dev/null 2>&1; then
-    exec python "${runtime}" "$@"
-fi
+for exe in python3.14 python3.13 python3.12 python3.11 python3 python; do
+    if command -v "${exe}" >/dev/null 2>&1 && "${exe}" -c "${ok}" >/dev/null 2>&1; then
+        exec "${exe}" "${runtime}" "$@"
+    fi
+done
 
-echo "Claude SEO requires Python 3.10 or newer. Tried CLAUDE_SEO_PYTHON, py -3, python3, and python." >&2
+echo "Claude SEO needs Python 3.11, 3.12, 3.13 or 3.14 (3.15 is not supported yet). Tried CLAUDE_SEO_PYTHON, py, python3.14 to python3.11, python3 and python." >&2
 exit 2

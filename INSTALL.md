@@ -14,7 +14,7 @@ STEP 1. Check my Python. Run:
 
     python3 --version
 
-It must be 3.10 or newer. macOS ships 3.9 at /usr/bin/python3, so if you see
+It must be 3.11, 3.12, 3.13 or 3.14 (3.15 is not supported yet). macOS ships 3.9 at /usr/bin/python3, so if you see
 3.9.x, STOP and tell me to run `brew install python` first, then start over.
 
 STEP 2. Register the plugin. This adds two keys to ~/.claude/settings.json and
@@ -91,7 +91,7 @@ chat is not enough, because the plugin is loaded when the app starts.
 
 macOS apps launched from the Dock do not always inherit your shell's PATH. A bare macOS
 environment resolves `python3` to `/usr/bin/python3`, which is **3.9.6** and below the
-minimum. If `/solnest-seo:seo setup` reports that it needs Python 3.10 or newer even though you know
+minimum. If `/solnest-seo:seo setup` reports that it needs Python 3.11 to 3.14 even though you know
 you installed a newer one, point it at your real interpreter directly.
 
 Find it:
@@ -115,7 +115,7 @@ python3` gave you; the one above is the common Apple Silicon Homebrew location.
 
 ## If something goes wrong
 
-**"Python 3.10 or newer required"** is the most common failure by a wide margin.
+**"Python 3.11 to 3.14 required"** is the most common failure by a wide margin.
 Run `python3 --version`. If macOS is giving you 3.9, run `brew install python`,
 open a new terminal, and start again.
 

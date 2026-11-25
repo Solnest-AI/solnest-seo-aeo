@@ -71,7 +71,7 @@ def test_hook_launcher_preserves_blocking_exit_code_two(tmp_path: Path) -> None:
 
 def test_windows_installer_prefers_py_launcher_and_rejects_store_stubs() -> None:
     text = INSTALL_PS1.read_text(encoding="utf-8")
-    py_pos = text.index("Exe = 'py'; Args = @('-3')")
+    py_pos = text.index("Exe = 'py'; Args = @('-3.14')")
     python3_pos = text.index("Exe = 'python3'; Args = @()")
     python_pos = text.index("Exe = 'python'; Args = @()")
 

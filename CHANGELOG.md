@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.5.0-solnest] - 2026-11-24
 
+### Fixed
+
+- **Windows install works again on machines with Python 3.15.** The installer and the
+  launcher now pick Python 3.14, 3.13, 3.12 or 3.11 first, even when 3.15 is the newest one on
+  the computer. The Google Ads library has no build for 3.15 yet, so the install used to fail.
+- **Security updates for two libraries.** Pillow is now 13.0.0 or newer and soupsieve 4.0.0 or
+  newer, which clears 45 published advisories. Both need Python 3.11, so the minimum is now
+  3.11 (3.10 reached end of life in October 2026).
+
 ### Added
 
 - **Updates install themselves.** Once a day, when Claude Code starts, a background hook
