@@ -15,6 +15,10 @@ Write-Host ""
 
 function Resolve-Python {
     $candidates = @(
+        @{ Exe = 'py'; Args = @('-3.14') },
+        @{ Exe = 'py'; Args = @('-3.13') },
+        @{ Exe = 'py'; Args = @('-3.12') },
+        @{ Exe = 'py'; Args = @('-3.11') },
         @{ Exe = 'py'; Args = @('-3') },
         @{ Exe = 'python3'; Args = @() },
         @{ Exe = 'python'; Args = @() }
@@ -76,7 +80,7 @@ function Test-PythonCandidate {
         return $null
     }
 
-    $probeCode = 'import sys; print(sys.executable); print(sys.version.split()[0]); raise SystemExit(0 if sys.version_info >= (3, 10) else 1)'
+    $probeCode = 'import sys; print(sys.executable); print(sys.version.split()[0]); raise SystemExit(0 if (3, 11) <= sys.version_info[:2] < (3, 15) else 1)'
     $probe = Invoke-External -Exe $Exe -Args @($Args + @('-c', $probeCode)) -Quiet
     $probeText = ($probe.Output -join "`n")
 
@@ -94,7 +98,7 @@ function Test-PythonCandidate {
 # Check prerequisites
 $python = Resolve-Python
 if ($null -eq $python) {
-    Write-Host "[x] Python is required but was not found (tried 'py -3', 'python3', and 'python')." -ForegroundColor Red
+    Write-Host "[x] Python 3.11 to 3.14 is required but was not found (tried 'py -3.14' to 'py -3.11', 'py -3', 'python3', and 'python'). Python 3.15 is not supported yet." -ForegroundColor Red
     exit 1
 }
 
@@ -124,7 +128,7 @@ $RepoUrl = "https://github.com/Solnest-AI/solnest-seo-aeo"
 # If the tag is not published yet the clone falls back to the default branch,
 # so the installer never silently installs nothing.
 # Override: $env:CLAUDE_SEO_TAG = 'main'; .\install.ps1
-$RepoTag = if ($env:CLAUDE_SEO_TAG) { $env:CLAUDE_SEO_TAG } else { 'v2.4.3' }
+$RepoTag = if ($env:CLAUDE_SEO_TAG) { $env:CLAUDE_SEO_TAG } else { 'v2.5.0' }
 
 # Create directories
 New-Item -ItemType Directory -Force -Path $SkillDir | Out-Null

@@ -14,11 +14,26 @@ license: MIT
 compatibility: "DataForSEO MCP for Tier 1+, Google Maps API for Tier 2"
 metadata:
   author: AgriciDaniel
-  version: "2.4.3"
+  version: "2.5.0"
   category: seo
 ---
 
 # Maps Intelligence (March 2026)
+
+## Your own changes (read first, every time)
+
+Before anything else, read `~/.solnest/seo/my-instructions.md` if it exists and
+follow it. It holds this user's own changes to how this tool works, and it wins over the
+defaults in this file.
+
+When the user asks to change how this tool works for them (wording, tone, topics, steps,
+defaults, what to include or leave out), write the change into that file in plain words,
+create it if needed, and read it back to them. **Never edit this tool's own files for
+that.** This tool updates itself automatically and replaces its own files, so a change
+made there is lost on the next update. Their keys, sign-ins and API settings
+(`~/.config/claude-seo/`), caches and drift baselines (`~/.cache/claude-seo/`) and the Python
+environment `/solnest-seo:seo setup` built are never touched by an update either, so those
+still go where they always have.
 
 Maps platform analysis for local businesses. Works with external APIs to assess
 how a business appears on Google Maps, Bing Places, Apple Maps, and OpenStreetMap.

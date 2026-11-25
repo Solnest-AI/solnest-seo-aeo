@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0-solnest] - 2026-11-24
+
+### Fixed
+
+- **Windows install works again on machines with Python 3.15.** The installer and the
+  launcher now pick Python 3.14, 3.13, 3.12 or 3.11 first, even when 3.15 is the newest one on
+  the computer. The Google Ads library has no build for 3.15 yet, so the install used to fail.
+- **Security updates for two libraries.** Pillow is now 13.0.0 or newer and soupsieve 4.0.0 or
+  newer, which clears 45 published advisories. Both need Python 3.11, so the minimum is now
+  3.11 (3.10 reached end of life in October 2026).
+
+### Added
+
+- **Updates install themselves.** Once a day, when Claude Code starts, a background hook
+  (`hooks/self-update.js`) runs `claude plugin marketplace update solnest-ai` and
+  `claude plugin update solnest-seo@solnest-ai`. Claude Code installs a new copy only when the
+  plugin version goes up, so nothing ships until a release bumps it. The new version loads the
+  next time Claude Code starts. It never blocks startup, logs one line per check to
+  `~/.solnest/autoupdate.log`, and stops when `~/.solnest/paused` exists (the same switch as
+  every other Solnest tool).
+- **Your own changes survive updates.** Every skill now reads
+  `~/.solnest/seo/my-instructions.md` first. When you ask Claude to change how the plugin
+  works for you, it writes the change there, outside the plugin folder an update replaces.
+  Keys and sign-ins (`~/.config/claude-seo/`), caches and drift baselines
+  (`~/.cache/claude-seo/`) and the setup's Python environment were already outside it.
+
 ## [2.4.3-solnest] - 2026-10-11
 
 ### Fixed

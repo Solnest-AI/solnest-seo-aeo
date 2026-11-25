@@ -14,11 +14,26 @@ argument-hint: "[url]"
 license: MIT
 metadata:
   author: Solnest AI
-  version: "2.4.3"
+  version: "2.5.0"
   category: seo
 ---
 
 # Solnest AEO: AI Visibility Audit
+
+## Your own changes (read first, every time)
+
+Before anything else, read `~/.solnest/seo/my-instructions.md` if it exists and
+follow it. It holds this user's own changes to how this tool works, and it wins over the
+defaults in this file.
+
+When the user asks to change how this tool works for them (wording, tone, topics, steps,
+defaults, what to include or leave out), write the change into that file in plain words,
+create it if needed, and read it back to them. **Never edit this tool's own files for
+that.** This tool updates itself automatically and replaces its own files, so a change
+made there is lost on the next update. Their keys, sign-ins and API settings
+(`~/.config/claude-seo/`), caches and drift baselines (`~/.cache/claude-seo/`) and the Python
+environment `/solnest-seo:seo setup` built are never touched by an update either, so those
+still go where they always have.
 
 ## Start here: what actually moves AI citations
 

@@ -26,7 +26,8 @@ PLUGIN = "solnest-seo"
 REPO = "Solnest-AI/solnest-seo-aeo"
 PLUGIN_KEY = f"{PLUGIN}@{MARKETPLACE}"
 SETTINGS = Path.home() / ".claude" / "settings.json"
-MIN_PY = (3, 10)
+MIN_PY = (3, 11)
+MAX_PY = (3, 15)  # exclusive: google-ads has no 3.15 build yet
 
 
 def _load(path: Path) -> dict:
@@ -46,7 +47,7 @@ def _atomic_write(path: Path, data: dict) -> None:
 
 
 def check_python() -> tuple[bool, str]:
-    for exe in ("python3", "python"):
+    for exe in ("python3.14", "python3.13", "python3.12", "python3.11", "python3", "python"):
         found = shutil.which(exe)
         if not found:
             continue
@@ -55,11 +56,11 @@ def check_python() -> tuple[bool, str]:
                 [found, "-c", "import sys;print('%d.%d' % sys.version_info[:2])"],
                 capture_output=True, text=True, timeout=20)
             major, minor = (int(x) for x in out.stdout.strip().split("."))
-            if (major, minor) >= MIN_PY:
+            if MIN_PY <= (major, minor) < MAX_PY:
                 return True, f"{found} is Python {major}.{minor}"
         except Exception:
             continue
-    return False, ("No Python 3.10+ found. macOS ships 3.9 at /usr/bin/python3. "
+    return False, ("No Python 3.11 to 3.14 found (3.15 is not supported yet). macOS ships 3.9 at /usr/bin/python3. "
                    "Install a current Python (brew install python) and run this again.")
 
 

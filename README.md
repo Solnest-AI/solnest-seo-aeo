@@ -36,7 +36,7 @@ Prefer to read first? The same steps are in [INSTALL.md](INSTALL.md) with troubl
 python3 --version
 ```
 
-It must be 3.10 or newer. macOS ships 3.9 at `/usr/bin/python3`. If you see 3.9.x, stop and tell
+It must be 3.11, 3.12, 3.13 or 3.14 (3.15 is not supported yet). macOS ships 3.9 at `/usr/bin/python3`. If you see 3.9.x, stop and tell
 them to run `brew install python`, then start over. This is the most common install failure.
 
 **Step 2. Register the plugin.** This merges two keys into `~/.claude/settings.json` and backs the
@@ -71,6 +71,21 @@ That builds an isolated Python environment and downloads a headless browser. It 
 minutes and installs nothing globally. Then they are ready.
 
 Then point them at the two commands below.
+
+---
+
+## Updates
+
+You don't have to do anything. Once a day, when Claude Code starts, the plugin checks for a new
+version in the background and installs it. It loads the next time you open Claude Code. Your
+keys, Google sign-in, caches and your own changes (Claude saves those in `~/.solnest/seo/`) are
+never touched.
+
+Claude: to update right away when they ask, run
+`claude plugin marketplace update solnest-ai && claude plugin update solnest-seo@solnest-ai`,
+then tell them to quit and reopen Claude Code. Each automatic check adds one line to
+`~/.solnest/autoupdate.log`. To stop automatic updates: `mkdir -p ~/.solnest && touch ~/.solnest/paused`
+(this pauses every Solnest tool; delete the file to turn them back on).
 
 ---
 
@@ -170,7 +185,7 @@ marketplace yet: it looks for a plugin named `claude-seo`, so it would not find 
 
 ## Requirements
 
-- Python 3.10+ (3.10 reaches end of life in October 2026, so use 3.11 or newer for a new install)
+- Python 3.11 to 3.14 (3.15 is not supported yet: the Google Ads library has no build for it)
 - Claude Code
 - Optional: Playwright Chromium, for SPA rendering and screenshots. The installer offers it.
 - Optional: Google API credentials for real Search Console, CrUX and GA4 data. Run `/solnest-seo:seo google setup`.
