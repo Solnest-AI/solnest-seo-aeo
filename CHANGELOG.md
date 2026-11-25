@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0-solnest] - 2026-11-24
+
+### Added
+
+- **Updates install themselves.** Once a day, when Claude Code starts, a background hook
+  (`hooks/self-update.js`) runs `claude plugin marketplace update solnest-ai` and
+  `claude plugin update solnest-seo@solnest-ai`. Claude Code installs a new copy only when the
+  plugin version goes up, so nothing ships until a release bumps it. The new version loads the
+  next time Claude Code starts. It never blocks startup, logs one line per check to
+  `~/.solnest/autoupdate.log`, and stops when `~/.solnest/paused` exists (the same switch as
+  every other Solnest tool).
+- **Your own changes survive updates.** Every skill now reads
+  `~/.solnest/seo/my-instructions.md` first. When you ask Claude to change how the plugin
+  works for you, it writes the change there, outside the plugin folder an update replaces.
+  Keys and sign-ins (`~/.config/claude-seo/`), caches and drift baselines
+  (`~/.cache/claude-seo/`) and the setup's Python environment were already outside it.
+
 ## [2.4.3-solnest] - 2026-10-11
 
 ### Fixed

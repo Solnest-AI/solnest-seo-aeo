@@ -11,11 +11,26 @@ argument-hint: "[stage] [url|topic]"
 license: MIT
 metadata:
   author: AgriciDaniel
-  version: "2.4.3"
+  version: "2.5.0"
   category: seo
 ---
 
 # FLOW Framework: Find · Leverage · Optimize · Win
+
+## Your own changes (read first, every time)
+
+Before anything else, read `~/.solnest/seo/my-instructions.md` if it exists and
+follow it. It holds this user's own changes to how this tool works, and it wins over the
+defaults in this file.
+
+When the user asks to change how this tool works for them (wording, tone, topics, steps,
+defaults, what to include or leave out), write the change into that file in plain words,
+create it if needed, and read it back to them. **Never edit this tool's own files for
+that.** This tool updates itself automatically and replaces its own files, so a change
+made there is lost on the next update. Their keys, sign-ins and API settings
+(`~/.config/claude-seo/`), caches and drift baselines (`~/.cache/claude-seo/`) and the Python
+environment `/solnest-seo:seo setup` built are never touched by an update either, so those
+still go where they always have.
 
 FLOW is an evidence-led SEO operating model built for the AI-search era. Claude SEO
 integrates the FLOW prompt library (41 prompts across 5 stages) so every analysis can

@@ -74,6 +74,21 @@ Then point them at the two commands below.
 
 ---
 
+## Updates
+
+You don't have to do anything. Once a day, when Claude Code starts, the plugin checks for a new
+version in the background and installs it. It loads the next time you open Claude Code. Your
+keys, Google sign-in, caches and your own changes (Claude saves those in `~/.solnest/seo/`) are
+never touched.
+
+Claude: to update right away when they ask, run
+`claude plugin marketplace update solnest-ai && claude plugin update solnest-seo@solnest-ai`,
+then tell them to quit and reopen Claude Code. Each automatic check adds one line to
+`~/.solnest/autoupdate.log`. To stop automatic updates: `mkdir -p ~/.solnest && touch ~/.solnest/paused`
+(this pauses every Solnest tool; delete the file to turn them back on).
+
+---
+
 ## The two commands that matter
 
 ```bash
