@@ -130,10 +130,17 @@ jobs:
           $ErrorActionPreference = "Stop"
           $skillRoot = Join-Path $env:USERPROFILE ".claude\skills\seo"
           $runtime = Join-Path $skillRoot "scripts\runtime.py"
-          $doctor = & py -3 $runtime doctor --json
+          # Same choice as install.ps1 and scripts/claude-seo: newest supported (3.11 to 3.14)
+          $pyArg = $null
+          foreach ($v in '-3.14','-3.13','-3.12','-3.11') {
+            & py $v -c "import sys" 2>$null
+            if ($LASTEXITCODE -eq 0) { $pyArg = $v; break }
+          }
+          if ($null -eq $pyArg) { throw "no supported Python for py launcher" }
+          $doctor = & py $pyArg $runtime doctor --json
           if ($LASTEXITCODE -ne 0) { throw "runtime doctor failed" }
           $doctor | ConvertFrom-Json | Out-Null
-          $updates = & py -3 $runtime run seo_updates.py --limit 1 --json
+          $updates = & py $pyArg $runtime run seo_updates.py --limit 1 --json
           if ($LASTEXITCODE -ne 0) { throw "seo_updates failed" }
           $parsedUpdates = $updates | ConvertFrom-Json
           if ($parsedUpdates.count -ne 1) { throw "Expected one Google update" }
@@ -261,10 +268,17 @@ jobs:
           $ErrorActionPreference = "Stop"
           $skillRoot = Join-Path $env:USERPROFILE ".claude\skills\seo"
           $runtime = Join-Path $skillRoot "scripts\runtime.py"
-          $doctor = & py -3 $runtime doctor --json
+          # Same choice as install.ps1 and scripts/claude-seo: newest supported (3.11 to 3.14)
+          $pyArg = $null
+          foreach ($v in '-3.14','-3.13','-3.12','-3.11') {
+            & py $v -c "import sys" 2>$null
+            if ($LASTEXITCODE -eq 0) { $pyArg = $v; break }
+          }
+          if ($null -eq $pyArg) { throw "no supported Python for py launcher" }
+          $doctor = & py $pyArg $runtime doctor --json
           if ($LASTEXITCODE -ne 0) { throw "runtime doctor failed" }
           $doctor | ConvertFrom-Json | Out-Null
-          $updates = & py -3 $runtime run seo_updates.py --limit 1 --json
+          $updates = & py $pyArg $runtime run seo_updates.py --limit 1 --json
           if ($LASTEXITCODE -ne 0) { throw "seo_updates failed" }
           $parsedUpdates = $updates | ConvertFrom-Json
           if ($parsedUpdates.count -ne 1) { throw "Expected one Google update" }
